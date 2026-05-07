@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "FastUI2 - VisualDemo",
+            "request": "launch",
+            "mainClass": "fastui.VisualDemo",
+            "projectName": "fastui2",
+            "cwd": "${workspaceFolder}/FastUI2",
+            "vmArgs": "--enable-native-access=ALL-UNNAMED -Djava.library.path=${workspaceFolder}/FastTheme/build;${workspaceFolder}/FastCore/build"
+        }
+    ]
+}
