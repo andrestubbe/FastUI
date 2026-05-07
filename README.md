@@ -69,8 +69,9 @@ FastUI is designed to saturate high-refresh-rate monitors with minimal CPU footp
 
 ---
 
-## Installation (JitPack)
+## Installation
 
+### Option 1: Maven (Recommended)
 Add the JitPack repository and the dependency to your `pom.xml`:
 
 ```xml
@@ -89,6 +90,26 @@ Add the JitPack repository and the dependency to your `pom.xml`:
     </dependency>
 </dependencies>
 ```
+
+### Option 2: Gradle
+Add the JitPack repository to your `build.gradle`:
+
+```groovy
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    implementation 'io.github.andrestubbe:fastui:v0.1.0'
+}
+```
+
+### Option 3: Direct Download
+For simple projects, you can download the standalone JAR directly:
+1. 📦 **[fastui-v0.1.0.jar](https://github.com/andrestubbe/FastUI/releases)**
+
+> [!NOTE]
+> Since FastUI core is pure Java, no additional native loader (FastCore) is strictly required unless you are using the native integration features provided in the `examples`.
 
 ---
 
