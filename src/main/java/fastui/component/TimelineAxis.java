@@ -184,7 +184,7 @@ public class TimelineAxis extends Component {
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         
-        if (gran == Calendar.WEEK_OF_YEAR) cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        if (gran == Granularity.WEEK) cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         if (gran == Granularity.MONTH || gran == Granularity.QUARTER) cal.set(Calendar.DAY_OF_MONTH, 1);
         if (gran == Granularity.QUARTER) cal.set(Calendar.MONTH, (cal.get(Calendar.MONTH) / 3) * 3);
         if (gran == Granularity.YEAR) cal.set(Calendar.DAY_OF_YEAR, 1);

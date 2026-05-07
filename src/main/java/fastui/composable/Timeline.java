@@ -69,6 +69,8 @@ public class Timeline implements Composable {
         this.axis.setViewport(now - sevenDaysMs, now);
     }
 
+    public RangeBehavior3x3 getRangeBehavior() { return range.getBehavior(); }
+
     public void setBounds(final int x, final int y, final int w, final int axisH, final int rangeH, final int gap) {
         int padding = 10;
         this.mainBackground.setBounds(x, y, w, axisH + rangeH + (padding * 2));
