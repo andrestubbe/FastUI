@@ -1,4 +1,4 @@
-# FastUI — High-Performance, Deterministic UI for Java
+﻿# FastUI â€” High-Performance, Deterministic UI for Java
 
 **A retained-mode UI framework for the FastJava ecosystem, focusing on hardware-locked performance and pixel-perfect aesthetics.**
 
@@ -10,7 +10,7 @@
 FastUI is a next-generation UI framework built for maximum speed and zero-copy efficiency. Unlike traditional Java UI frameworks (Swing/AWT) that rasterize vector graphics on every frame, FastUI uses a **Retained-Mode Baking Pipeline** to achieve multi-thousand FPS performance on modern hardware.
 
 ```java
-// Quick Start — Rendering a Timeline
+// Quick Start â€” Rendering a Timeline
 import fastui.Timeline;
 
 public class Demo {
@@ -39,9 +39,9 @@ public class Demo {
 
 ## Key Features
 
-- **🚀 Baked Layers** — Components render once into internal caches for near-instant blitting.
-- **⚡ Sequencer Logic** — High-precision temporal selection cursors and timeline interaction.
-- **🧱 Zero Allocation** — The core render loop creates zero objects, eliminating GC pressure.
+- **ðŸš€ Baked Layers** â€” Components render once into internal caches for near-instant blitting.
+- **âš¡ Sequencer Logic** â€” High-precision temporal selection cursors and timeline interaction.
+- **ðŸ§± Zero Allocation** â€” The core render loop creates zero objects, eliminating GC pressure.
 
 ---
 
@@ -61,7 +61,7 @@ FastUI is designed to saturate high-refresh-rate monitors with minimal CPU footp
 ### Option 1: Maven (Recommended)
 Add the JitPack repository and the dependencies to your `pom.xml`:
 
-`xml
+```xml
 <repositories>
     <repository>
         <id>jitpack.io</id>
@@ -76,6 +76,7 @@ Add the JitPack repository and the dependencies to your `pom.xml`:
         <artifactId>fastui</artifactId>
         <version>v0.1.0</version>
     </dependency>
+
     <!-- FastCore (Required Native Loader) -->
     <dependency>
         <groupId>com.github.andrestubbe</groupId>
@@ -83,19 +84,19 @@ Add the JitPack repository and the dependencies to your `pom.xml`:
         <version>v0.1.0</version>
     </dependency>
 </dependencies>
-`
+```
 
 ### Option 2: Gradle (via JitPack)
-`groovy
+```groovy
 repositories {
     maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-    implementation 'com.github.andrestubbe:.1.0'
+    implementation 'com.github.andrestubbe:fastui:v0.1.0'
     implementation 'com.github.andrestubbe:fastcore:v0.1.0'
 }
-`
+```
 
 ### Option 3: Direct Download (No Build Tool)
 Download the latest JARs directly to add them to your classpath:
@@ -123,24 +124,24 @@ FastUI is a **pure Java library** and is natively compatible with any platform s
 
 | Platform | Status |
 |----------|--------|
-| Windows 10/11 | ✅ Fully Supported |
-| Linux | ✅ Fully Supported |
-| macOS | ✅ Fully Supported |
+| Windows 10/11 | âœ… Fully Supported |
+| Linux | âœ… Fully Supported |
+| macOS | âœ… Fully Supported |
 
 ---
 
 ## License
-MIT License — See [LICENSE](LICENSE) file for details.
+MIT License â€” See [LICENSE](LICENSE) file for details.
 
 ---
 
 ## Related Projects
-- [FastCore](https://github.com/andrestubbe/FastCore) — Native Library Loader
-- [FastTheme](https://github.com/andrestubbe/FastTheme) — Advanced UI styling engine
-- [FastFileSearch](https://github.com/andrestubbe/FastFileSearch) — Instant file search engine
+- [FastCore](https://github.com/andrestubbe/FastCore) â€” Native Library Loader
+- [FastTheme](https://github.com/andrestubbe/FastTheme) â€” Advanced UI styling engine
+- [FastFileSearch](https://github.com/andrestubbe/FastFileSearch) â€” Instant file search engine
 
 ---
-**Made with ⚡ by Andre Stubbe**
+**Made with âš¡ by Andre Stubbe**
 
 <!-- 
 SEO Keywords: java, ui framework, performance, retained mode, sequencer
