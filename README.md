@@ -1,58 +1,71 @@
-﻿# FastUI â€” High-Performance, Deterministic UI for Java
+﻿# FastUI — High-Performance, Deterministic UI for Java [v0.1.0]
 
-**A retained-mode UI framework for the FastJava ecosystem, focusing on hardware-locked performance and pixel-perfect aesthetics.**
+**A retained-mode UI framework for the FastJava ecosystem, focusing on per-component baked layers, sequencer-style interaction, and hardware-locked performance.**
 
 [![Java](https://img.shields.io/badge/Java-17+-blue.svg)](https://www.java.com)
-[![Platform](https://img.shields.io/badge/Platform-Cross%20Platform-lightgrey.svg)]()
+[![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![JitPack](https://jitpack.io/v/andrestubbe/FastUI.svg)](https://jitpack.io/#andrestubbe/FastUI)
 
-FastUI is a next-generation UI framework built for maximum speed and zero-copy efficiency. Unlike traditional Java UI frameworks (Swing/AWT) that rasterize vector graphics on every frame, FastUI uses a **Retained-Mode Baking Pipeline** to achieve multi-thousand FPS performance on modern hardware.
-
-```java
-// Quick Start â€” Rendering a Timeline
-import fastui.Timeline;
-
-public class Demo {
-    public static void main(String[] args) {
-        Timeline timeline = new Timeline(startTime, endTime, 200, 20, Color.BLACK);
-        
-        // In your render loop
-        root.render(g2d);
-    }
-}
-```
-
 ---
 
-## Table of Contents
-- [Key Features](#key-features)
-- [Performance](#performance)
-- [Installation](#installation)
-- [Try the Demo](#try-the-demo)
-- [API Reference](#api-reference)
-- [Platform Support](#platform-support)
-- [License](#license)
-- [Related Projects](#related-projects)
+**FastUI** is a next-generation UI framework built for maximum speed and zero-copy efficiency. Unlike traditional Java UI frameworks (Swing/AWT) that rasterize vector graphics on every frame, FastUI uses a **Retained-Mode Baking Pipeline** to achieve multi-thousand FPS performance on modern hardware.
 
 ---
 
 ## Key Features
 
-- **ðŸš€ Baked Layers** â€” Components render once into internal caches for near-instant blitting.
-- **âš¡ Sequencer Logic** â€” High-precision temporal selection cursors and timeline interaction.
-- **ðŸ§± Zero Allocation** â€” The core render loop creates zero objects, eliminating GC pressure.
+- **🚀 Baked Layers** — Components render once into `BufferedImage` caches for near-instant blitting.
+- **⚡ Sequencer Logic** — Advanced anchored-dragging and high-precision temporal selection cursors.
+- **🧱 Zero Allocation** — The core render loop creates zero objects, eliminating GC pressure.
+- **🎨 Neon-Dark Aesthetic** — Professionally curated design language with semi-transparent overlays and rounded capsules.
+- **🔧 Deterministic** — Predictable performance and hardware-locked timing via FastDWM integration.
 
 ---
 
-## Performance
+## Why FastUI?
+
+Standard Java UI frameworks were designed for an era of static interfaces. In today's world of high-DPI displays and 144Hz+ monitors, the "Immediate-Mode" rasterization model is a bottleneck. FastUI treats UI components as **Persistent Graphical Assets**.
+
+### Eliminating Framework Bottlenecks
+- **🔴 High Rasterization Overhead** — Rasterizing shapes every frame is CPU intensive. FastUI **bakes** them.
+- **📉 Garbage Collector Pressure** — Traditional loops allocate thousands of objects. FastUI is **allocation-free**.
+- **🌊 Resizing Flicker** — Standard resizing is jittery. FastUI integrates with `FastWindow` for butter-smooth scaling.
+- **⏱️ Lack of VSync Alignment** — FastUI is natively synchronized to the display refresh rate.
+
+---
+
+## Quick Start (Sequencer UI)
+
+```java
+// Initialize the UI Root
+Container root = new Container();
+
+// Add the Unified Timeline Sequencer
+Timeline timeline = new Timeline(
+    startTime, endTime, 
+    200, 20, Color.BLACK, // Height, Arc, BG
+    90, trackColor, spanColor, // Range settings
+    font, tickColor, labelColor
+);
+
+root.add(timeline);
+
+// In your VSync-locked render loop
+root.render(g2d); 
+```
+
+---
+
+## Performance Metrics
 
 FastUI is designed to saturate high-refresh-rate monitors with minimal CPU footprint.
 
 | Metric | FastUI | Standard Swing | Improvement |
 |-----------|---------|---------------|---------|
-| Render Time (100 Items) | **< 0.1 ms** | ~4.5 ms | **45x Faster** |
+| Render Time (100 Buttons) | **< 0.1 ms** | ~4.5 ms | **45x Faster** |
 | Memory Allocations | **0 per frame** | ~120 KB per frame | **Infinite** |
+| Jitter during Resize | **Zero** (Sync'd) | High | **Liquid Smooth** |
 
 ---
 
@@ -114,7 +127,9 @@ Download the latest JARs directly to add them to your classpath:
 |--------|-------------|
 | `Timeline` | High-precision temporal selector capsule with daily grid and selection markers. |
 | `TextArea` | Multi-line text display with automatic clipping and rounded backgrounds. |
+| `TextField` | Animated single-line input field with Neon-Dark styling. |
 | `Button` | High-performance interactive trigger with mouse behavior support. |
+| `Image3x3` | Sliceable asset renderer for perfectly rounded capsules at any size. |
 
 ---
 
@@ -124,25 +139,17 @@ FastUI is a **pure Java library** and is natively compatible with any platform s
 
 | Platform | Status |
 |----------|--------|
-| Windows 10/11 | âœ… Fully Supported |
-| Linux | âœ… Fully Supported |
-| macOS | âœ… Fully Supported |
-
----
-
-## License
-MIT License â€” See [LICENSE](LICENSE) file for details.
+| Windows 10/11 | ✅ Fully Supported |
+| Linux | ✅ Fully Supported |
+| macOS | ✅ Fully Supported |
 
 ---
 
 ## Related Projects
-- [FastCore](https://github.com/andrestubbe/FastCore) â€” Native Library Loader
-- [FastTheme](https://github.com/andrestubbe/FastTheme) â€” Advanced UI styling engine
-- [FastFileSearch](https://github.com/andrestubbe/FastFileSearch) â€” Instant file search engine
+- [FastCore](https://github.com/andrestubbe/FastCore) — Native Library Loader
+- [FastWindow](https://github.com/andrestubbe/FastWindow) — Native Window Engine
+- [FastTheme](https://github.com/andrestubbe/FastTheme) — Advanced UI styling engine
+- [FastFileSearch](https://github.com/andrestubbe/FastFileSearch) — Instant file search engine
 
 ---
-**Made with âš¡ by Andre Stubbe**
-
-<!-- 
-SEO Keywords: java, ui framework, performance, retained mode, sequencer
--->
+**Part of the FastJava Ecosystem** — *Making the JVM faster.*
