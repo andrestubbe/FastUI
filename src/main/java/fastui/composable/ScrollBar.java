@@ -1,14 +1,14 @@
 package fastui.composable;
 
 import fastui.component.Component;
-import fastui.behaviour.ScrollBarBehavior;
-import fastui.component.Image3x3;
+import fastui.behaviour.BehaviorScrollBar;
+import fastui.component.Image9Slice;
 
 import java.awt.image.BufferedImage;
 
 public class ScrollBar implements Composable {
-    private final Image3x3 track;
-    private final Image3x3 thumb;
+    private final Image9Slice track;
+    private final Image9Slice thumb;
     
     private float viewStart = 0f;
     private float viewEnd = 1f;
@@ -19,10 +19,11 @@ public class ScrollBar implements Composable {
     private ScrollListener listener;
 
     public ScrollBar(final BufferedImage trackImg, final BufferedImage thumbImg) {
-        this.track = new Image3x3(trackImg);
-        this.thumb = new Image3x3(thumbImg);
+        int arc = trackImg.getHeight() / 2;
+        this.track = new Image9Slice(arc, arc, 0, 0, trackImg);
+        this.thumb = new Image9Slice(arc, arc, 0, 0, thumbImg);
         
-        this.thumb.addBehavior(new ScrollBarBehavior(this.track, delta -> {
+        this.thumb.addBehavior(new BehaviorScrollBar(this.track, delta -> {
             final float span = viewEnd - viewStart;
             viewStart = Math.max(0, Math.min(1 - span, viewStart + delta));
             viewEnd = viewStart + span;
@@ -32,7 +33,7 @@ public class ScrollBar implements Composable {
         }));
     }
 
-    public void setBounds(final int x, final int y, final int w, final int h) {
+    public void setBounds(final float x, final float y, final float w, final float h) {
         this.track.setBounds(x, y, w, h);
         this.updateThumb();
     }
@@ -45,8 +46,8 @@ public class ScrollBar implements Composable {
 
     private void updateThumb() {
         if (this.track.getWidth() <= 0) return;
-        final int tw = Math.max(20, (int)((this.viewEnd - this.viewStart) * this.track.getWidth()));
-        final int tx = this.track.getX() + (int)(this.viewStart * this.track.getWidth());
+        final float tw = Math.max(20f, (this.viewEnd - this.viewStart) * this.track.getWidth());
+        final float tx = this.track.getX() + (this.viewStart * this.track.getWidth());
         this.thumb.setBounds(tx, this.track.getY(), tw, this.track.getHeight());
     }
 

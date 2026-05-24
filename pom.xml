@@ -5,7 +5,7 @@
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.github.andrestubbe</groupId>
+    <groupId>com.github.andrestubbe</groupId>
     <artifactId>fastui</artifactId>
     <version>0.1.0</version>
     <packaging>jar</packaging>
@@ -30,16 +30,16 @@
     <dependencies>
         <!-- FastCore - Unified JNI loader -->
         <dependency>
-            <groupId>io.github.andrestubbe</groupId>
+            <groupId>com.github.andrestubbe</groupId>
             <artifactId>fastcore</artifactId>
-            <version>1.0.0</version>
+            <version>0.1.0</version>
         </dependency>
         
         <!-- FastTheme - Native Theming -->
         <dependency>
-            <groupId>io.github.andrestubbe</groupId>
+            <groupId>com.github.andrestubbe</groupId>
             <artifactId>fasttheme</artifactId>
-            <version>0.2.0</version>
+            <version>0.3.0</version>
         </dependency>
     </dependencies>
 
@@ -56,22 +56,8 @@
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.4.0</version>
-                <executions>
-                    <execution>
-                        <id>add-source</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>examples/src/main/java</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.6.3</version>
             </plugin>
         </plugins>
     </build>

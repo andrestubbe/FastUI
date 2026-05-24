@@ -5,8 +5,10 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.awt.datatransfer.StringSelection;
+import java.util.function.Consumer;
 
 public class Text extends Image {
+
     private static final int PADDING = 12;
     private static final int CURSOR_BLINK_MS = 500;
 
@@ -14,17 +16,20 @@ public class Text extends Image {
     private final Color textColor;
     private final Color cursorColor;
     private final Color selectionColor;
-
     private StringBuilder textContent = new StringBuilder();
+    private final Timer cursorTimer;
     private boolean focused = false;
     private boolean cursorVisible = false;
-    private Timer cursorTimer;
-
     private int selectionStart = -1;
     private int selectionEnd = -1;
+    private Consumer<String> changeListener;
+
+    public void addChangeListener(Consumer<String> listener) {
+        this.changeListener = listener;
+    }
 
     public Text(final Font font, final Color textColor, final Color cursorColor) {
-        super(null); // Initialize Image with null, will be baked later
+        super(null);
         this.font = font;
         this.textColor = textColor;
         this.cursorColor = cursorColor;
@@ -50,6 +55,45 @@ public class Text extends Image {
         this.cursorTimer.stop();
         this.clearSelection();
         this.repaint();
+    }
+
+    @Override
+    public void onMousePressed(final float mx, final float my) {
+        final int index = this.getCharIndexAt(mx);
+        this.selectionStart = index;
+        this.selectionEnd = index;
+        this.repaint();
+    }
+
+    @Override
+    public void onMouseDragged(final float mx, final float my) {
+        this.selectionEnd = this.getCharIndexAt(mx);
+        this.repaint();
+    }
+
+    private int getCharIndexAt(final float mx) {
+        final float localX = mx - this.x - PADDING;
+        if (localX <= 0) return 0;
+        
+        final String str = this.textContent.toString();
+        final BufferedImage tmp = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+        final Graphics2D gTmp = tmp.createGraphics();
+        gTmp.setFont(this.font);
+        final FontMetrics fm = gTmp.getFontMetrics();
+        
+        int bestIndex = 0;
+        float minDiff = localX;
+        
+        for (int i = 0; i <= str.length(); i++) {
+            float w = fm.stringWidth(str.substring(0, i));
+            float diff = Math.abs(localX - w);
+            if (diff < minDiff) {
+                minDiff = diff;
+                bestIndex = i;
+            }
+        }
+        gTmp.dispose();
+        return bestIndex;
     }
 
     @Override
@@ -86,11 +130,14 @@ public class Text extends Image {
             this.textContent.append(c);
         }
         this.bakeText();
+        if (this.changeListener != null) {
+            this.changeListener.accept(this.textContent.toString());
+        }
         this.repaint();
     }
 
     private boolean hasSelection() {
-        return this.selectionStart >= 0 && this.selectionEnd > this.selectionStart;
+        return this.selectionStart >= 0 && this.selectionStart != this.selectionEnd;
     }
 
     private void clearSelection() {
@@ -99,13 +146,17 @@ public class Text extends Image {
     }
 
     private void deleteSelection() {
-        this.textContent.delete(this.selectionStart, this.selectionEnd);
+        final int start = Math.min(this.selectionStart, this.selectionEnd);
+        final int end = Math.max(this.selectionStart, this.selectionEnd);
+        this.textContent.delete(start, end);
         this.clearSelection();
     }
 
     private void copySelection() {
         if (!this.hasSelection()) return;
-        final String selected = this.textContent.substring(this.selectionStart, this.selectionEnd);
+        final int start = Math.min(this.selectionStart, this.selectionEnd);
+        final int end = Math.max(this.selectionStart, this.selectionEnd);
+        final String selected = this.textContent.substring(start, end);
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(selected), null);
     }
 
@@ -134,47 +185,50 @@ public class Text extends Image {
         this.setImage(bakedText);
     }
 
-    private int getTextWidth(final int charIndex) {
+    private float getTextWidth(final int charIndex) {
         if (charIndex == 0 || this.textContent.length() == 0) return 0;
         final BufferedImage tmp = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
         final Graphics2D gTmp = tmp.createGraphics();
         gTmp.setFont(this.font);
-        final int w = gTmp.getFontMetrics().stringWidth(this.textContent.substring(0, charIndex));
+        final float w = gTmp.getFontMetrics().stringWidth(this.textContent.substring(0, charIndex));
         gTmp.dispose();
         return w;
     }
 
-    private int getCursorX() {
+    private float getCursorX() {
         return this.x + PADDING + this.getTextWidth(this.textContent.length());
     }
 
     @Override
-    public void render(final Graphics2D g) {
-        // Draw selection highlight first
+    public void onRender(final Graphics2D g) {
         if (this.focused && this.hasSelection()) {
-            final int selX1 = this.x + PADDING + this.getTextWidth(this.selectionStart);
-            final int selX2 = this.x + PADDING + this.getTextWidth(this.selectionEnd);
+            final int start = Math.min(this.selectionStart, this.selectionEnd);
+            final int end = Math.max(this.selectionStart, this.selectionEnd);
+            final float selX1 = this.getAbsoluteX() + PADDING + this.getTextWidth(start);
+            final float selX2 = this.getAbsoluteX() + PADDING + this.getTextWidth(end);
             g.setColor(this.selectionColor);
-            g.fillRect(selX1, this.y + PADDING, selX2 - selX1, this.height - PADDING * 2);
+            g.fillRect((int)selX1, (int)(this.getAbsoluteY() + PADDING), (int)(selX2 - selX1), (int)(this.height - PADDING * 2));
         }
 
-        // Draw the baked text image via Image base class
-        // We calculate centered Y position for the image
         final BufferedImage img = this.getImage();
         if (img != null) {
-            final int textY = this.y + (this.height - img.getHeight()) / 2;
-            g.drawImage(img, this.x + PADDING, textY, null);
+            final float textY = this.getAbsoluteY() + (this.height - img.getHeight()) / 2f;
+            final Graphics2D g2 = (Graphics2D) g.create();
+            g2.translate(this.getAbsoluteX() + PADDING, textY);
+            g2.drawImage(img, 0, 0, null);
+            g2.dispose();
         }
 
-        // Draw cursor
         if (this.focused && this.cursorVisible && !this.hasSelection()) {
-            final int cursorX = this.getCursorX();
+            final float cursorX = this.getAbsoluteX() + PADDING + this.getTextWidth(this.textContent.length());
             g.setColor(this.cursorColor);
-            g.drawLine(cursorX, this.y + PADDING, cursorX, this.y + this.height - PADDING);
+            g.drawLine((int)cursorX, (int)(this.getAbsoluteY() + PADDING), (int)cursorX, (int)(this.getAbsoluteY() + this.height - PADDING));
         }
     }
 
-    public String getText() { return this.textContent.toString(); }
+    public String getText() {
+        return this.textContent.toString();
+    }
 
     public void setText(final String value) {
         this.textContent = new StringBuilder(value);

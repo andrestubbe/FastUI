@@ -17,10 +17,10 @@
       </list>
     </option>
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 4,
-  "fromUser": false
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4,
+  &quot;fromUser&quot;: false
+}</component>
   <component name="ProjectId" id="3DM5k9rQKUrByUhGlJC61ocFBtS" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -32,7 +32,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/andre/Documents/2026-04-28-Work-FastJava/FastUI2"
+    "last_opened_file_path": "C:/Users/andre/Documents/2026-05-17-Work-FastJava/FastUI"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -43,7 +43,7 @@
   <component name="RunManager">
     <configuration name="VisualDemo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="fastui.VisualDemo" />
-      <module name="fastui2" />
+      <module name="fastui" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="fastui.*" />

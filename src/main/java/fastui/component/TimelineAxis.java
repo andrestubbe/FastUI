@@ -1,6 +1,7 @@
 package fastui.component;
 
 import java.awt.*;
+import fastui.model.TimelineViewport;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -8,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 public class TimelineAxis extends Component {
+
     public interface ViewportListener {
         void onViewportChanged();
     }
@@ -42,142 +44,133 @@ public class TimelineAxis extends Component {
     private final Color tickColor;
     private final Color labelColor;
     private final Color selectionIndicatorColor;
-
-    private final long absoluteStart;
-    private final long absoluteEnd;
-
-    private long viewStart;
-    private long viewEnd;
-
-    private float relSelMin = 0.2f;
-    private float relSelMax = 0.8f;
+    private final TimelineViewport viewport;
 
     private EdgeDrag drag = EdgeDrag.NONE;
-    private int dragStartX = 0;
+    private float dragStartX = 0f;
     private long dragViewStart = 0;
     private long dragViewEnd = 0;
     private long dragGrabTime = 0;
 
-    private final List<ViewportListener> viewportListeners = new ArrayList<>();
-
-    public TimelineAxis(final long absoluteStart, final long absoluteEnd,
+    public TimelineAxis(final TimelineViewport viewport,
                         final Font font, final Color backgroundColor,
                         final Color tickColor, final Color labelColor,
                         final Color selectionIndicatorColor) {
-        this.absoluteStart = absoluteStart;
-        this.absoluteEnd = absoluteEnd;
-        this.viewStart = absoluteStart;
-        this.viewEnd = absoluteEnd;
+        this.viewport = viewport;
         this.font = font;
         this.backgroundColor = backgroundColor;
         this.tickColor = tickColor;
         this.labelColor = labelColor;
         this.selectionIndicatorColor = selectionIndicatorColor;
-    }
 
-    public void onRangeChanged(final float min, final float max) {
-        this.relSelMin = min;
-        this.relSelMax = max;
-        this.repaint();
-    }
+        this.viewport.addListener(new TimelineViewport.ViewportListener() {
+            @Override
+            public void onViewportChanged() { this.repaint(); }
+            @Override
+            public void onSelectionChanged(final float min, final float max) { this.repaint(); }
 
-    public void setViewport(final long start, final long end) {
-        this.viewStart = Math.max(this.absoluteStart, start);
-        this.viewEnd = Math.min(this.absoluteEnd, end);
-        this.notifyViewport();
-    }
-
-    public void pan(final long deltaMs) {
-        final long currentSpan = this.viewEnd - this.viewStart;
-        long newStart = Math.max(this.absoluteStart, Math.min(this.viewStart + deltaMs, this.absoluteEnd - currentSpan));
-        this.viewStart = newStart;
-        this.viewEnd = newStart + currentSpan;
-        this.notifyViewport();
-    }
-
-    public long getAbsoluteStart() { return this.absoluteStart; }
-    public long getAbsoluteEnd() { return this.absoluteEnd; }
-    public long getViewStart() { return this.viewStart; }
-    public long getViewEnd() { return this.viewEnd; }
-
-    public void addViewportListener(final ViewportListener l) {
-        this.viewportListeners.add(l);
-    }
-
-    private void notifyViewport() {
-        for (final ViewportListener l : this.viewportListeners) l.onViewportChanged();
-        this.repaint();
+            private void repaint() {
+                TimelineAxis.this.repaint();
+            }
+        });
     }
 
     @Override
-    public void onMousePressed(final int mx, final int my) {
-        final int third = this.width / 3;
+    public void onMousePressed(final float mx, final float my) {
+        final float third = this.width / 3f;
         if (mx <= this.x + third) {
             this.drag = EdgeDrag.LEFT;
-        } else if (mx >= this.x + 2 * third) {
+        } else if (mx >= this.x + 2f * third) {
             this.drag = EdgeDrag.RIGHT;
         } else {
             this.drag = EdgeDrag.CENTER;
         }
         
         this.dragStartX = mx;
-        this.dragViewStart = this.viewStart;
-        this.dragViewEnd = this.viewEnd;
+        this.dragViewStart = this.viewport.getViewStart();
+        this.dragViewEnd = this.viewport.getViewEnd();
         
-        final double fraction = (double)(mx - this.x) / Math.max(1, this.width);
-        this.dragGrabTime = this.viewStart + (long)(fraction * (this.viewEnd - this.viewStart));
+        final double fraction = (double)(mx - this.x) / Math.max(1f, this.width);
+        this.dragGrabTime = this.viewport.getViewStart() + (long)(fraction * (this.viewport.getViewEnd() - this.viewport.getViewStart()));
     }
 
     @Override
-    public void onMouseReleased(final int mx, final int my) {
+    public void onMouseReleased(final float mx, final float my) {
         this.drag = EdgeDrag.NONE;
     }
 
     @Override
-    public void onMouseDragged(final int mx, final int my) {
+    public void onMouseDragged(final float mx, final float my) {
         if (this.drag == EdgeDrag.NONE || this.width <= 0) return;
         
         final double f = (double)(mx - this.x) / this.width;
         final long currentSpan = this.dragViewEnd - this.dragViewStart;
 
         if (this.drag == EdgeDrag.CENTER) {
-            long newStart = Math.max(this.absoluteStart, Math.min(this.dragGrabTime - (long)(f * currentSpan), this.absoluteEnd - currentSpan));
-            this.viewStart = newStart;
-            this.viewEnd = newStart + currentSpan;
+            final long newStart = Math.max(this.viewport.getAbsoluteStart(), Math.min(this.dragGrabTime - (long)(f * currentSpan), this.viewport.getAbsoluteEnd() - currentSpan));
+            this.viewport.setView(newStart, newStart + currentSpan);
         } else if (this.drag == EdgeDrag.LEFT) {
             double denom = 1.0 - f;
             if (denom < 0.05) denom = 0.05; 
-            long newStart = (long)((this.dragGrabTime - f * this.viewEnd) / denom);
-            this.viewStart = Math.max(this.absoluteStart, Math.min(newStart, this.viewEnd - MS_DAY));
+            final long newStart = (long)((this.dragGrabTime - f * this.viewport.getViewEnd()) / denom);
+            this.viewport.setView(Math.max(this.viewport.getAbsoluteStart(), Math.min(newStart, this.viewport.getViewEnd() - MS_DAY)), this.viewport.getViewEnd());
         } else if (this.drag == EdgeDrag.RIGHT) {
             double denom = f;
             if (denom < 0.05) denom = 0.05;
-            long newEnd = this.viewStart + (long)((this.dragGrabTime - this.viewStart) / denom);
-            this.viewEnd = Math.min(this.absoluteEnd, Math.max(newEnd, this.viewStart + MS_DAY));
+            final long newEnd = this.viewport.getViewStart() + (long)((this.dragGrabTime - this.viewport.getViewStart()) / denom);
+            this.viewport.setView(this.viewport.getViewStart(), Math.min(this.viewport.getAbsoluteEnd(), Math.max(newEnd, this.viewport.getViewStart() + MS_DAY)));
         }
-        this.notifyViewport();
     }
 
-    private Granularity computeGranularity() {
-        final long visibleMs = this.viewEnd - this.viewStart;
-        if (visibleMs <= MS_WEEK * 2)  return Granularity.DAY;
-        if (visibleMs <= MS_MONTH * 3) return Granularity.WEEK;
-        if (visibleMs <= MS_YEAR)      return Granularity.MONTH;
-        if (visibleMs <= MS_YEAR * 3)  return Granularity.QUARTER;
-        return Granularity.YEAR;
+    @Override
+    public void onRender(final Graphics2D g) {
+        if (this.backgroundColor.getAlpha() > 0) {
+            g.setColor(this.backgroundColor);
+            g.fillRect((int)this.getAbsoluteX(), (int)this.getAbsoluteY(), (int)this.width, (int)this.height);
+        }
+
+        final Granularity gran = this.computeGranularity();
+        final SimpleDateFormat fmt = new SimpleDateFormat(gran.format);
+        g.setFont(this.font);
+        final FontMetrics fm = g.getFontMetrics();
+        final int tickH = 8;
+
+        final Graphics2D g2 = (Graphics2D) g.create();
+        g2.setClip((int)this.getAbsoluteX(), (int)this.getAbsoluteY(), (int)this.width, (int)this.height);
+
+        for (final long tick : this.computeTicks()) {
+            final float tx = this.toScreenX(tick);
+            
+            final String label = fmt.format(new Date(tick));
+            final int labelW = fm.stringWidth(label);
+            
+            final float labelX = tx - labelW / 2f;
+            
+            g2.setColor(this.labelColor);
+            g2.drawString(label, labelX, this.getAbsoluteY() + 6 + tickH + fm.getAscent() + 2);
+            
+            g2.setColor(this.tickColor);
+            g2.drawLine((int)tx, (int)this.getAbsoluteY(), (int)tx, (int)(this.getAbsoluteY() + tickH));
+        }
+        
+        g2.dispose();
     }
 
-    public int toScreenX(final long epochMs) {
-        final long span = Math.max(1, this.viewEnd - this.viewStart);
-        final double fraction = (double)(epochMs - this.viewStart) / span;
-        return this.x + (int)(fraction * this.width);
+    public void onRangeChanged(final float min, final float max) {
+        this.viewport.setSelection(min, max);
+    }
+
+    public float toScreenX(final long epochMs) {
+        final long span = Math.max(1, this.viewport.getViewEnd() - this.viewport.getViewStart());
+        final double fraction = (double)(epochMs - this.viewport.getViewStart()) / span;
+        return this.getAbsoluteX() + (float)(fraction * this.width);
     }
 
     public List<Long> computeTicks() {
         final List<Long> ticks = new ArrayList<>();
         final Granularity gran = this.computeGranularity();
         final Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date(this.viewStart));
+        cal.setTime(new Date(this.viewport.getViewStart()));
         
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
@@ -189,36 +182,24 @@ public class TimelineAxis extends Component {
         if (gran == Granularity.QUARTER) cal.set(Calendar.MONTH, (cal.get(Calendar.MONTH) / 3) * 3);
         if (gran == Granularity.YEAR) cal.set(Calendar.DAY_OF_YEAR, 1);
 
-        while (cal.getTimeInMillis() <= this.viewEnd) {
-            if (cal.getTimeInMillis() >= this.viewStart) ticks.add(cal.getTimeInMillis());
+        cal.add(gran.calField, -gran.calStep);
+
+        while (cal.getTimeInMillis() <= this.viewport.getViewEnd() + (this.viewport.getViewEnd() - this.viewport.getViewStart()) / 5) {
+            ticks.add(cal.getTimeInMillis());
             cal.add(gran.calField, gran.calStep);
             if (ticks.size() > 500) break;
         }
         return ticks;
     }
 
-    @Override
-    public void render(final Graphics2D g) {
-        if (this.backgroundColor.getAlpha() > 0) {
-            g.setColor(this.backgroundColor);
-            g.fillRect(this.x, this.y, this.width, this.height);
-        }
-
-        final Granularity gran = this.computeGranularity();
-        final SimpleDateFormat fmt = new SimpleDateFormat(gran.format);
-        g.setFont(this.font);
-        final FontMetrics fm = g.getFontMetrics();
-        final int tickH = 8;
-
-        for (final long tick : this.computeTicks()) {
-            final int tx = this.toScreenX(tick);
-            if (tx < this.x || tx > this.x + this.width) continue;
-            
-            final String label = fmt.format(new Date(tick));
-            final int labelW = fm.stringWidth(label);
-            final int labelX = Math.max(this.x, Math.min(tx - labelW / 2, this.x + this.width - labelW));
-            g.setColor(this.labelColor);
-            g.drawString(label, labelX, this.y + 6 + tickH + fm.getAscent() + 2);
-        }
+    private Granularity computeGranularity() {
+        final long visibleMs = this.viewport.getViewEnd() - this.viewport.getViewStart();
+        if (visibleMs <= MS_WEEK * 2)  return Granularity.DAY;
+        if (visibleMs <= MS_MONTH * 3) return Granularity.WEEK;
+        if (visibleMs <= MS_YEAR)      return Granularity.MONTH;
+        if (visibleMs <= MS_YEAR * 3)  return Granularity.QUARTER;
+        return Granularity.YEAR;
     }
+
+    public TimelineViewport getViewport() { return this.viewport; }
 }
