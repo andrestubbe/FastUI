@@ -179,4 +179,4 @@ MIT License — See [LICENSE](LICENSE) file for details.
 - [FastFileSearch](https://github.com/andrestubbe/FastFileSearch) — Instant file search engine
 
 ---
-**Part of the FastJava Ecosystem** — *Making the JVM faster.*
+**Part of the FastJava Ecosystem** — *Making the JVM faster. Small package. Maximum speed. Zero bloat. 🚀📋*
