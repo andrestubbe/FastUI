@@ -18,6 +18,33 @@ to achieve multi-thousand FPS performance on modern hardware.
 
 ---
 
+## Table of Contents
+
+- [TODO](#features)
+
+---
+
+## Quick Start (Sequencer UI)
+
+```java
+        // Initialize the UI Root
+        Container root = new Container();
+        
+        // Add the Unified Timeline Sequencer
+        Timeline timeline = new Timeline(
+                startTime, endTime,
+                200, 20, Color.BLACK, // Height, Arc, BG
+                90, trackColor, spanColor, // Range settings
+                font, tickColor, labelColor
+        );
+        root.add(timeline);
+        
+        // In your VSync-locked render loop
+        root.render(g2d); 
+```
+
+---
+
 ## Key Features
 
 - **🚀 Baked Layers** — Components render once into `BufferedImage` caches for near-instant blitting.
@@ -42,31 +69,6 @@ Graphical Assets**.
 - **🌊 Resizing Flicker** — Standard resizing is jittery. FastUI integrates with `FastWindow` for butter-smooth scaling.
 - **⏱️ Lack of VSync Alignment** — FastUI is natively synchronized to the display refresh rate.
 
----
-
-## Quick Start (Sequencer UI)
-
-```java
-// Initialize the UI Root
-Container root = new Container();
-
-// Add the Unified Timeline Sequencer
-Timeline timeline = new Timeline(
-        startTime, endTime,
-        200, 20, Color.BLACK, // Height, Arc, BG
-        90, trackColor, spanColor, // Range settings
-        font, tickColor, labelColor
-);
-
-root.
-
-add(timeline);
-
-// In your VSync-locked render loop
-root.
-
-render(g2d); 
-```
 
 ---
 
