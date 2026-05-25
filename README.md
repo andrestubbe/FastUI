@@ -6,12 +6,16 @@
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010+-lightgrey.svg)]()
 [![JitPack](https://img.shields.io/badge/JitPack-ready-green.svg)](https://jitpack.io/#andrestubbe)
 
+---
+
 **⚡ A retained-mode UI framework for the FastJava ecosystem, focusing on per-component baked layers, sequencer-style
 interaction, and hardware-locked performance.**
 
 **FastUI** is a next-generation UI framework built for maximum speed and zero-copy efficiency. Unlike traditional Java
 UI frameworks (Swing/AWT) that rasterize vector graphics on every frame, FastUI uses a **Retained-Mode Baking Pipeline**
 to achieve multi-thousand FPS performance on modern hardware.
+
+---
 
 [![FastKeyboard Showcase](docs/screenshot.png)](https://www.youtube.com/watch?v=BZsqQl7WqWk)
 
