@@ -1,6 +1,7 @@
 fastui\behaviour\BehaviorScrollBar$ScrollListener.class
 fastui\Container.class
 fastui\component\Image9Slice.class
+fastui\behaviour\BehaviourDragMove.class
 fastui\composable\Composable.class
 fastui\composable\TextArea.class
 fastui\model\TimelineViewport$ViewportListener.class
@@ -11,6 +12,7 @@ fastui\component\TimelineAxis$1.class
 fastui\behaviour\BehaviorScrollBar.class
 fastui\component\Text.class
 fastui\composable\Button.class
+fastui\behaviour\BehaviourDragResize.class
 fastui\component\Image.class
 fastui\component\TimelineAxis$ViewportListener.class
 fastui\component\TimelineAxis$EdgeDrag.class
