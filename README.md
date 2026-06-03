@@ -1,4 +1,4 @@
-﻿# FastUI  v0.1.0 [ALPHA] — High-Performance, Deterministic UI for Java
+# FastUI  v0.1.0 [ALPHA] � High-Performance, Deterministic UI for Java
 
 [![Status](https://img.shields.io/badge/status-v0.1.0-brightgreen.svg)](https://github.com/andrestubbe/FastUI/releases/tag/v0.1.0)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -8,7 +8,7 @@
 
 ---
 
-**⚡ A retained-mode UI framework for the FastJava ecosystem, focusing on per-component baked layers, sequencer-style
+**? A retained-mode UI framework for the FastJava ecosystem, focusing on per-component baked layers, sequencer-style
 interaction, and hardware-locked performance.**
 
 **FastUI** is a next-generation UI framework built for maximum speed and zero-copy efficiency. Unlike traditional Java
@@ -51,12 +51,12 @@ to achieve multi-thousand FPS performance on modern hardware.
 
 ## Key Features
 
-- **🚀 Baked Layers** — Components render once into `BufferedImage` caches for near-instant blitting.
-- **⚡ Sequencer Logic** — Advanced anchored-dragging and high-precision temporal selection cursors.
-- **🧱 Zero Allocation** — The core render loop creates zero objects, eliminating GC pressure.
-- **🎨 Neon-Dark Aesthetic** — Professionally curated design language with semi-transparent overlays and rounded
+- **?? Baked Layers** � Components render once into `BufferedImage` caches for near-instant blitting.
+- **? Sequencer Logic** � Advanced anchored-dragging and high-precision temporal selection cursors.
+- **?? Zero Allocation** � The core render loop creates zero objects, eliminating GC pressure.
+- **?? Neon-Dark Aesthetic** � Professionally curated design language with semi-transparent overlays and rounded
   capsules.
-- **🔧 Deterministic** — Predictable performance and hardware-locked timing via FastDWM integration.
+- **?? Deterministic** � Predictable performance and hardware-locked timing via FastDWM integration.
 
 ---
 
@@ -68,10 +68,10 @@ Graphical Assets**.
 
 ### Eliminating Framework Bottlenecks
 
-- **🔴 High Rasterization Overhead** — Rasterizing shapes every frame is CPU intensive. FastUI **bakes** them.
-- **📉 Garbage Collector Pressure** — Traditional loops allocate thousands of objects. FastUI is **allocation-free**.
-- **🌊 Resizing Flicker** — Standard resizing is jittery. FastUI integrates with `FastWindow` for butter-smooth scaling.
-- **⏱️ Lack of VSync Alignment** — FastUI is natively synchronized to the display refresh rate.
+- **?? High Rasterization Overhead** � Rasterizing shapes every frame is CPU intensive. FastUI **bakes** them.
+- **?? Garbage Collector Pressure** � Traditional loops allocate thousands of objects. FastUI is **allocation-free**.
+- **?? Resizing Flicker** � Standard resizing is jittery. FastUI integrates with `FastWindow` for butter-smooth scaling.
+- **?? Lack of VSync Alignment** � FastUI is natively synchronized to the display refresh rate.
 
 
 ---
@@ -137,9 +137,9 @@ dependencies {
 
 Download the latest JARs directly to add them to your classpath:
 
-1. 📦 **[fastui-v0.1.0.jar](https://github.com/andrestubbe/FastUI/releases/download/v0.1.0/fastui-v0.1.0.jar)** (The Core
+1. ?? **[fastui-v0.1.0.jar](https://github.com/andrestubbe/FastUI/releases/download/v0.1.0/fastui-v0.1.0.jar)** (The Core
    Library)
-2. ⚙️ **[fastcore-v0.1.0.jar](https://github.com/andrestubbe/FastCore/releases/download/v0.1.0/fastcore-v0.1.0.jar)** (
+2. ?? **[fastcore-v0.1.0.jar](https://github.com/andrestubbe/FastCore/releases/download/v0.1.0/fastcore-v0.1.0.jar)** (
    The Mandatory Native Loader)
 
 > [!IMPORTANT]
@@ -161,7 +161,7 @@ Download the latest JARs directly to add them to your classpath:
 
 * **[COMPILE.md](COMPILE.md)**: Full compilation guide (MSVC C++17 build chain + JNI Setup).
 * **[REFERENCE.md](docs/REFERENCE.md)**: Full API descriptions, border configurations, and codepoint index.
-* **[PHILOSOPHIE.md](docs/PHILOSOPHIE.md)**: The engineering rationale for zero-allocation performance.
+* **[PHILOSOPHY.md](docs/PHILOSOPHY.md)**: The engineering rationale for zero-allocation performance.
 * **[ROADMAP.md](docs/ROADMAP.md)**: Future milestones and planned features.
 
 ---
@@ -171,24 +171,24 @@ FastUI is a **pure Java library** and is natively compatible with any platform s
 
 | Platform      | Status            |
 |---------------|-------------------|
-| Windows 10/11 | ✅ Fully Supported |
-| Linux         | ✅ Fully Supported |
-| macOS         | ✅ Fully Supported |
+| Windows 10/11 | ? Fully Supported |
+| Linux         | ? Fully Supported |
+| macOS         | ? Fully Supported |
 
 ---
 
 ## License
 
-MIT License — See [LICENSE](LICENSE) file for details.
+MIT License � See [LICENSE](LICENSE) file for details.
 
 ---
 
 ## Related Projects
 
-- [FastCore](https://github.com/andrestubbe/FastCore) — Native Library Loader
-- [FastWindow](https://github.com/andrestubbe/FastWindow) — Native Window Engine
-- [FastTheme](https://github.com/andrestubbe/FastTheme) — Advanced UI styling engine
-- [FastFileSearch](https://github.com/andrestubbe/FastFileSearch) — Instant file search engine
+- [FastCore](https://github.com/andrestubbe/FastCore) � Native Library Loader
+- [FastWindow](https://github.com/andrestubbe/FastWindow) � Native Window Engine
+- [FastTheme](https://github.com/andrestubbe/FastTheme) � Advanced UI styling engine
+- [FastFileSearch](https://github.com/andrestubbe/FastFileSearch) � Instant file search engine
 
 ---
-**Part of the FastJava Ecosystem** — *Making the JVM faster. Small package. Maximum speed. Zero bloat. 🚀📋*
+**Part of the FastJava Ecosystem** � *Making the JVM faster. Small package. Maximum speed. Zero bloat. ????*
