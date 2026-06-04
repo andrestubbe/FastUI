@@ -12,8 +12,9 @@ fastui\component\TimelineAxis$1.class
 fastui\behaviour\BehaviorScrollBar.class
 fastui\component\Text.class
 fastui\composable\Button.class
-fastui\behaviour\BehaviourDragResize.class
+fastui\util\Clipping.class
 fastui\component\Image.class
+fastui\component\ImageSwappable.class
 fastui\component\TimelineAxis$ViewportListener.class
 fastui\component\TimelineAxis$EdgeDrag.class
 fastui\composable\ScrollBar$ScrollListener.class
@@ -24,13 +25,13 @@ fastui\InteractionManager$2.class
 fastui\composable\TextArea$TextDisplay.class
 fastui\component\Image9HRange.class
 fastui\component\Component.class
-fastui\component\Sliceable.class
 fastui\component\TimelineGrid.class
 fastui\model\TimelineViewport.class
 fastui\util\Animator.class
 fastui\Factory.class
 fastui\composable\ButtonTheme.class
 fastui\behaviour\BehaviorRange3x3.class
+fastui\component\ClipContainer.class
 fastui\composable\ScrollBar.class
 fastui\component\TimelineGrid$1.class
 fastui\composable\TextField.class

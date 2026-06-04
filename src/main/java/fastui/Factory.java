@@ -28,8 +28,8 @@ public class Factory {
         final Graphics2D gTmp = tmp.createGraphics();
         gTmp.setFont(font);
         final FontMetrics fm = gTmp.getFontMetrics();
-        final int w = fm.stringWidth(text);
-        final int h = fm.getHeight();
+        final int w = Math.max(1, fm.stringWidth(text));
+        final int h = Math.max(1, fm.getHeight());
         gTmp.dispose();
 
         // Bake onto exact-size image

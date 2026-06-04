@@ -1,7 +1,7 @@
 package fastui.behaviour;
 
 import fastui.component.Component;
-import fastui.component.Sliceable;
+import fastui.component.ImageSwappable;
 
 import java.awt.image.BufferedImage;
 
@@ -18,21 +18,21 @@ public class BehaviorButton3x3 implements Behaviour {
 
     @Override
     public void onMouseEnter(final Component target) {
-        ((Sliceable) target).setImages(this.hover);
+        ((ImageSwappable) target).setImages(this.hover);
     }
 
     @Override
     public void onMouseExit(final Component target) {
-        ((Sliceable) target).setImages(this.base);
+        ((ImageSwappable) target).setImages(this.base);
     }
 
     @Override
     public void onMousePressed(final Component target, final float mx, final float my) {
-        ((Sliceable) target).setImages(this.pressed);
+        ((ImageSwappable) target).setImages(this.pressed);
     }
 
     @Override
     public void onMouseReleased(final Component target, final float mx, final float my) {
-        ((Sliceable) target).setImages(this.base);
+        ((ImageSwappable) target).setImages(this.base);
     }
 }

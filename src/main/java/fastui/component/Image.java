@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Image extends Component {
+public class Image extends Component implements ImageSwappable {
 
     private BufferedImage image;
 
@@ -34,5 +34,13 @@ public class Image extends Component {
     public void setImage(final BufferedImage image) {
         this.image = image;
         this.repaint();
+    }
+
+    @Override
+    public void setImages(BufferedImage... layers) {
+        if (layers != null && layers.length > 0) {
+            this.image = layers[0];
+            this.repaint();
+        }
     }
 }

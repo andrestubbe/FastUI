@@ -3,7 +3,7 @@ package fastui.component;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Image9Slice extends Component implements Sliceable {
+public class Image9Slice extends Component implements ImageSwappable {
 
     protected BufferedImage cache;
     private BufferedImage[] layers;

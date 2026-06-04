@@ -37,7 +37,8 @@ public class Button implements Composable {
         final BufferedImage hover = Factory.createSliceableLayer((int)height, arc, hoverColor);
         final BufferedImage pressed = Factory.createSliceableLayer((int)height, arc, pressedColor);
         
-        this.background = new Image9Slice(arc, arc, arc, arc, base);
+        int slice = arc / 2;
+        this.background = new Image9Slice(slice, slice, slice, slice, base);
         this.background.addBehavior(new BehaviorButton3x3(base, hover, pressed));
         
         final BufferedImage bakedLabel = Factory.createLabel(text, font, textColor);
