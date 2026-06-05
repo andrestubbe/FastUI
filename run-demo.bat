@@ -1,6 +1,7 @@
 @echo off
-setlocal
+chcp 65001 >nul
 cd /d "%~dp0"
+setlocal
 
 echo ===========================================
 echo FastUI Demo (v0.1.0)
@@ -12,11 +13,10 @@ echo.
 :: Run the demo from the example folder using Maven
 cd examples
 echo Compiling and Launching Demo...
-call mvn -q compile exec:java -Dexec.mainClass="fastui.VisualDemo"
+call mvn compile exec:java -Dexec.mainClass="fastui.VisualDemo"
 if %errorlevel% neq 0 (
     echo.
     echo [ERROR] Demo failed to launch. 
-    echo Ensure you ran 'mvn clean install' at least once to install FastUI locally.
     pause
 )
 
