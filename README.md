@@ -1,4 +1,4 @@
-# FastUI 0.1.0 [ALPHA-2026-06] — � High-Performance, Deterministic UI for Java
+# FastUI  0.1.0 [ALPHA]  High-Performance, Deterministic UI for Java
 
 [![Status](https://img.shields.io/badge/status-0.1.0-brightgreen.svg)](https://github.com/andrestubbe/FastUI/releases/tag/0.1.0)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
