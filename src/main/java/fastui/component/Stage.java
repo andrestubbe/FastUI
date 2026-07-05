@@ -2,7 +2,6 @@ package fastui.component;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class Stage extends Component {
@@ -33,7 +32,7 @@ public class Stage extends Component {
         if (this.children == null) return;
 
         final Graphics2D g2dClip = (Graphics2D) g.create();
-        g2dClip.setClip((int)this.getAbsoluteX(), (int)this.getAbsoluteY(), (int)this.width, (int)this.height);
+        g2dClip.setClip((int) this.getAbsoluteX(), (int) this.getAbsoluteY(), (int) this.width, (int) this.height);
 
         final float vx = this.getAbsoluteX() + this.width / 2f;
         final float vy = this.getAbsoluteY() + this.height / 2f;
@@ -54,13 +53,13 @@ public class Stage extends Component {
         sorted.sort((c1, c2) -> {
             final float z1 = (c1 instanceof Spatial) ? ((Spatial) c1).getCalculatedDepth() : 0f;
             final float z2 = (c2 instanceof Spatial) ? ((Spatial) c2).getCalculatedDepth() : 0f;
-            return Float.compare(z2, z1); 
+            return Float.compare(z2, z1);
         });
 
         for (final Component child : sorted) {
             child.render(g2dClip);
         }
-        
+
         g2dClip.dispose();
     }
 
@@ -69,15 +68,49 @@ public class Stage extends Component {
         this.onRender(g);
     }
 
-    public float getCameraX() { return this.cameraX; }
-    public float getCameraY() { return this.cameraY; }
-    public float getCameraZ() { return this.cameraZ; }
-    public float getTargetCameraZ() { return this.targetCameraZ; }
-    public float getFocalLength() { return this.focalLength; }
+    public float getCameraX() {
+        return this.cameraX;
+    }
 
-    public void setCameraX(final float x) { this.cameraX = x; this.repaint(); }
-    public void setCameraY(final float y) { this.cameraY = y; this.repaint(); }
-    public void setCameraZ(final float z) { this.targetCameraZ = z; this.repaint(); }
-    public void setCameraZInstant(final float z) { this.cameraZ = z; this.targetCameraZ = z; this.repaint(); }
-    public void setFocalLength(final float f) { this.focalLength = f; this.repaint(); }
+    public float getCameraY() {
+        return this.cameraY;
+    }
+
+    public float getCameraZ() {
+        return this.cameraZ;
+    }
+
+    public float getTargetCameraZ() {
+        return this.targetCameraZ;
+    }
+
+    public float getFocalLength() {
+        return this.focalLength;
+    }
+
+    public void setCameraX(final float x) {
+        this.cameraX = x;
+        this.repaint();
+    }
+
+    public void setCameraY(final float y) {
+        this.cameraY = y;
+        this.repaint();
+    }
+
+    public void setCameraZ(final float z) {
+        this.targetCameraZ = z;
+        this.repaint();
+    }
+
+    public void setCameraZInstant(final float z) {
+        this.cameraZ = z;
+        this.targetCameraZ = z;
+        this.repaint();
+    }
+
+    public void setFocalLength(final float f) {
+        this.focalLength = f;
+        this.repaint();
+    }
 }

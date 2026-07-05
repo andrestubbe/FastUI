@@ -28,20 +28,20 @@ public class Image9HRange extends Image9Slice implements Rangeable {
         if (this.needsRebake || this.cache == null) {
             this.bake();
         }
-        
+
         if (this.cache != null) {
             final float targetX = this.getAbsoluteX() + this.minRange * this.width;
             final float targetW = (this.maxRange - this.minRange) * this.width;
-            
+
             if (targetW > 0) {
                 // Draw sub-section of the baked cache
                 float srcX1 = this.minRange * this.width;
                 float srcX2 = this.maxRange * this.width;
-                
-                g.drawImage(cache, 
-                    (int)targetX, (int)this.getAbsoluteY(), (int)(targetX + targetW), (int)(this.getAbsoluteY() + this.height),
-                    (int)srcX1, 0, (int)srcX2, (int)this.height, 
-                    null);
+
+                g.drawImage(cache,
+                        (int) targetX, (int) this.getAbsoluteY(), (int) (targetX + targetW), (int) (this.getAbsoluteY() + this.height),
+                        (int) srcX1, 0, (int) srcX2, (int) this.height,
+                        null);
             }
         }
     }

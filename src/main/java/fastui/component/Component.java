@@ -135,12 +135,29 @@ public abstract class Component {
         return (this.parent == null) ? this.y : this.parent.getAbsoluteY() + this.y;
     }
 
-    public float getX() { return this.x; }
-    public float getY() { return this.y; }
-    public float getWidth() { return this.width; }
-    public float getHeight() { return this.height; }
-    public boolean isHitTestable() { return this.hitTestable; }
-    public List<Component> getChildren() { return this.children; }
+    public float getX() {
+        return this.x;
+    }
+
+    public float getY() {
+        return this.y;
+    }
+
+    public float getWidth() {
+        return this.width;
+    }
+
+    public float getHeight() {
+        return this.height;
+    }
+
+    public boolean isHitTestable() {
+        return this.hitTestable;
+    }
+
+    public List<Component> getChildren() {
+        return this.children;
+    }
 
     public void setRoot(final Container root) {
         this.root = root;

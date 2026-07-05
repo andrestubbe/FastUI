@@ -2,8 +2,6 @@ package fastui.component;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Image extends Component implements ImageSwappable {
 
@@ -22,7 +20,7 @@ public class Image extends Component implements ImageSwappable {
         if (this.image != null) {
             final Graphics2D g2 = (Graphics2D) g.create();
             g2.translate(this.getAbsoluteX(), this.getAbsoluteY());
-            g2.drawImage(this.image, 0, 0, (int)this.width, (int)this.height, null);
+            g2.drawImage(this.image, 0, 0, (int) this.width, (int) this.height, null);
             g2.dispose();
         }
     }

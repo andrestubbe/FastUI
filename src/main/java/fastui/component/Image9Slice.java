@@ -53,7 +53,7 @@ public class Image9Slice extends Component implements ImageSwappable {
     protected void bake() {
         if (this.width <= 0 || this.height <= 0) return;
 
-        this.cache = new BufferedImage((int)this.width, (int)this.height, BufferedImage.TYPE_INT_ARGB);
+        this.cache = new BufferedImage((int) this.width, (int) this.height, BufferedImage.TYPE_INT_ARGB);
         final Graphics2D g = this.cache.createGraphics();
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -76,13 +76,13 @@ public class Image9Slice extends Component implements ImageSwappable {
 
                 final int dx1 = 0;
                 final int dx2 = this.left;
-                final int dx3 = (int)this.width - this.right;
-                final int dx4 = (int)this.width;
+                final int dx3 = (int) this.width - this.right;
+                final int dx4 = (int) this.width;
 
                 final int dy1 = 0;
                 final int dy2 = this.top;
-                final int dy3 = (int)this.height - this.bottom;
-                final int dy4 = (int)this.height;
+                final int dy3 = (int) this.height - this.bottom;
+                final int dy4 = (int) this.height;
 
                 g.drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, null);
                 g.drawImage(img, dx2, dy1, dx3, dy2, sx2, sy1, sx3, sy2, null);

@@ -2,9 +2,9 @@ package fastui.component;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.awt.datatransfer.StringSelection;
 import java.util.function.Consumer;
 
 public class Text extends Image {
@@ -74,16 +74,16 @@ public class Text extends Image {
     private int getCharIndexAt(final float mx) {
         final float localX = mx - this.x - PADDING;
         if (localX <= 0) return 0;
-        
+
         final String str = this.textContent.toString();
         final BufferedImage tmp = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
         final Graphics2D gTmp = tmp.createGraphics();
         gTmp.setFont(this.font);
         final FontMetrics fm = gTmp.getFontMetrics();
-        
+
         int bestIndex = 0;
         float minDiff = localX;
-        
+
         for (int i = 0; i <= str.length(); i++) {
             float w = fm.stringWidth(str.substring(0, i));
             float diff = Math.abs(localX - w);
@@ -207,7 +207,7 @@ public class Text extends Image {
             final float selX1 = this.getAbsoluteX() + PADDING + this.getTextWidth(start);
             final float selX2 = this.getAbsoluteX() + PADDING + this.getTextWidth(end);
             g.setColor(this.selectionColor);
-            g.fillRect((int)selX1, (int)(this.getAbsoluteY() + PADDING), (int)(selX2 - selX1), (int)(this.height - PADDING * 2));
+            g.fillRect((int) selX1, (int) (this.getAbsoluteY() + PADDING), (int) (selX2 - selX1), (int) (this.height - PADDING * 2));
         }
 
         final BufferedImage img = this.getImage();
@@ -222,7 +222,7 @@ public class Text extends Image {
         if (this.focused && this.cursorVisible && !this.hasSelection()) {
             final float cursorX = this.getAbsoluteX() + PADDING + this.getTextWidth(this.textContent.length());
             g.setColor(this.cursorColor);
-            g.drawLine((int)cursorX, (int)(this.getAbsoluteY() + PADDING), (int)cursorX, (int)(this.getAbsoluteY() + this.height - PADDING));
+            g.drawLine((int) cursorX, (int) (this.getAbsoluteY() + PADDING), (int) cursorX, (int) (this.getAbsoluteY() + this.height - PADDING));
         }
     }
 

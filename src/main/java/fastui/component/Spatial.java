@@ -1,8 +1,8 @@
 package fastui.component;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,11 +17,11 @@ public class Spatial extends Component {
     private float vanishingY = 0f;
     private float focalLength = 15.0f;
     private Color fogColor = new Color(15, 15, 15);
-    
+
     private BufferedImage textureCache;
     private List<BufferedImage> mipmaps;
     private boolean mipmappingEnabled = false;
-    
+
     private Component contentHovered = null;
     private Component contentActive = null;
 
@@ -58,16 +58,16 @@ public class Spatial extends Component {
     @Override
     public void onRender(final Graphics2D g) {
         final float depth = this.z - this.cameraZ;
-        if (depth <= -this.focalLength + 1.0f) return; 
+        if (depth <= -this.focalLength + 1.0f) return;
 
         final float scale = this.focalLength / (this.focalLength + depth);
         // Softer fog: 0.001f instead of 0.1f for a more gradual gradient
-        final float darkness = 1.0f / (1.0f + (float)Math.pow(Math.max(0, depth * 0.0015f), 1.2f));
-        
+        final float darkness = 1.0f / (1.0f + (float) Math.pow(Math.max(0, depth * 0.0015f), 1.2f));
+
         // Pan
         final float px = -this.cameraX * scale;
         final float py = -this.cameraY * scale;
-        
+
         // Perspective position
         final float vx = (this.vanishingX - this.vanishingX * scale) + px;
         final float vy = (this.vanishingY - this.vanishingY * scale) + py;
@@ -79,7 +79,7 @@ public class Spatial extends Component {
         this.lastVy = this.vanishingY;
         this.lastRotY = this.rotationY;
         this.lastWorldRotY = this.worldRotationY;
-        
+
         if (this.textureCache == null && !this.mipmappingEnabled) {
             this.updateCache();
         } else if (this.mipmaps == null && this.mipmappingEnabled) {
@@ -88,20 +88,20 @@ public class Spatial extends Component {
 
         final Graphics2D g2d = (Graphics2D) g.create();
         g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        
+
         if (Math.abs(this.rotationY) < 0.1f && Math.abs(this.worldRotationY) < 0.1f) {
             // Fast Path: Standard Affine projection
             g2d.translate(this.getAbsoluteX() * scale + vx, this.getAbsoluteY() * scale + vy);
             if (darkness < 1.0f) {
                 final float[] scales = {darkness, darkness, darkness, 1.0f};
                 final float[] offsets = {
-                    this.fogColor.getRed() * (1.0f - darkness),
-                    this.fogColor.getGreen() * (1.0f - darkness),
-                    this.fogColor.getBlue() * (1.0f - darkness),
-                    0f
+                        this.fogColor.getRed() * (1.0f - darkness),
+                        this.fogColor.getGreen() * (1.0f - darkness),
+                        this.fogColor.getBlue() * (1.0f - darkness),
+                        0f
                 };
                 final java.awt.image.RescaleOp fogOp = new java.awt.image.RescaleOp(scales, offsets, g2d.getRenderingHints());
-                
+
                 if (this.mipmappingEnabled && this.mipmaps != null && !this.mipmaps.isEmpty()) {
                     int level = (int) (Math.log(1.0 / Math.min(1.0, scale)) / Math.log(2.0));
                     level = Math.max(0, Math.min(level, this.mipmaps.size() - 1));
@@ -126,11 +126,11 @@ public class Spatial extends Component {
             }
         } else {
             // 3D Path: World Orbit + Local Slicing
-            final float wRad = (float)Math.toRadians(this.worldRotationY);
-            final float wCos = (float)Math.cos(wRad);
-            final float wSin = (float)Math.sin(wRad);
+            final float wRad = (float) Math.toRadians(this.worldRotationY);
+            final float wCos = (float) Math.cos(wRad);
+            final float wSin = (float) Math.sin(wRad);
 
-            final float lRad = (float)Math.toRadians(this.rotationY);
+            final float lRad = (float) Math.toRadians(this.rotationY);
 
             final float halfW = this.width / 2f;
             final float halfH = this.height / 2f;
@@ -149,8 +149,8 @@ public class Spatial extends Component {
 
                 // 2. Combined Rotation (World + Local)
                 final float totalRad = lRad + wRad;
-                final float tCos = (float)Math.cos(totalRad);
-                final float tSin = (float)Math.sin(totalRad);
+                final float tCos = (float) Math.cos(totalRad);
+                final float tSin = (float) Math.sin(totalRad);
 
                 final float rx0 = (lx0 - halfW) * tCos;
                 final float rz0 = (lx0 - halfW) * tSin;
@@ -183,22 +183,22 @@ public class Spatial extends Component {
 
                 // Draw the textured slice
                 g2d.drawImage(this.textureCache,
-                    (int)sx0, (int)sy0, (int)sx1, (int)(sy0 + sh0),
-                    (int)lx0, 0, (int)lx1, (int)this.height,
-                    null);
-                
+                        (int) sx0, (int) sy0, (int) sx1, (int) (sy0 + sh0),
+                        (int) lx0, 0, (int) lx1, (int) this.height,
+                        null);
+
                 // 5. 3D Fog Overlay (High-Performance)
                 // Use a more stable fog calculation relative to screen depth
-                float sliceDarkness = 1.0f / (1.0f + (float)Math.pow(Math.max(0, fz0 * 0.0012f), 1.3f));
+                float sliceDarkness = 1.0f / (1.0f + (float) Math.pow(Math.max(0, fz0 * 0.0012f), 1.3f));
                 if (sliceDarkness < 0.99f) {
                     float alpha = 1.0f - sliceDarkness;
                     g2d.setColor(new Color(
-                        this.fogColor.getRed() / 255f, 
-                        this.fogColor.getGreen() / 255f, 
-                        this.fogColor.getBlue() / 255f, 
-                        alpha));
+                            this.fogColor.getRed() / 255f,
+                            this.fogColor.getGreen() / 255f,
+                            this.fogColor.getBlue() / 255f,
+                            alpha));
                     // Fill the slice area on screen
-                    g2d.fillRect((int)sx0, (int)sy0, (int)(sx1 - sx0 + 1), (int)sh0 + 1);
+                    g2d.fillRect((int) sx0, (int) sy0, (int) (sx1 - sx0 + 1), (int) sh0 + 1);
                 }
             }
         }
@@ -209,7 +209,7 @@ public class Spatial extends Component {
     private void updateCache() {
         if (this.width <= 0 || this.height <= 0) return;
 
-        final BufferedImage base = new BufferedImage((int)this.width, (int)this.height, BufferedImage.TYPE_INT_ARGB);
+        final BufferedImage base = new BufferedImage((int) this.width, (int) this.height, BufferedImage.TYPE_INT_ARGB);
         final Graphics2D g2 = base.createGraphics();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -220,9 +220,9 @@ public class Spatial extends Component {
         if (this.mipmappingEnabled) {
             this.mipmaps = new ArrayList<>();
             this.mipmaps.add(base);
-            
-            int currW = (int)this.width;
-            int currH = (int)this.height;
+
+            int currW = (int) this.width;
+            int currH = (int) this.height;
             BufferedImage prev = base;
 
             while (currW > 16 && currH > 16) {
@@ -237,15 +237,15 @@ public class Spatial extends Component {
                 prev = next;
             }
         }
-        
+
         this.textureCache = base;
     }
 
     public float getCalculatedDepth() {
         // MUST match onRender orbital logic exactly
-        final float wRad = (float)Math.toRadians(this.worldRotationY);
-        final float wCos = (float)Math.cos(wRad);
-        final float wSin = (float)Math.sin(wRad);
+        final float wRad = (float) Math.toRadians(this.worldRotationY);
+        final float wCos = (float) Math.cos(wRad);
+        final float wSin = (float) Math.sin(wRad);
 
         final float halfW = this.width / 2f;
         final float worldCenterX = this.getAbsoluteX() + halfW - this.vanishingX;
@@ -255,19 +255,50 @@ public class Spatial extends Component {
         return worldCenterX * wSin + worldCenterZ * wCos;
     }
 
-    public float getZ() { return this.z; }
-    public void setZ(final float z) { this.z = z; }
-    public float getRotationY() { return this.rotationY; }
-    public void setRotationY(final float rotationY) { this.rotationY = rotationY; }
-    public float getWorldRotationY() { return this.worldRotationY; }
-    public void setWorldRotationY(final float worldRotationY) { this.worldRotationY = worldRotationY; }
-    public int getSliceCount() { return this.sliceCount; }
-    public void setSliceCount(final int sliceCount) { this.sliceCount = sliceCount; }
-    
-    public void setCameraX(final float cameraX) { this.cameraX = cameraX; }
-    public void setCameraY(final float cameraY) { this.cameraY = cameraY; }
-    public void setCameraZ(final float cameraZ) { this.cameraZ = cameraZ; }
-    
+    public float getZ() {
+        return this.z;
+    }
+
+    public void setZ(final float z) {
+        this.z = z;
+    }
+
+    public float getRotationY() {
+        return this.rotationY;
+    }
+
+    public void setRotationY(final float rotationY) {
+        this.rotationY = rotationY;
+    }
+
+    public float getWorldRotationY() {
+        return this.worldRotationY;
+    }
+
+    public void setWorldRotationY(final float worldRotationY) {
+        this.worldRotationY = worldRotationY;
+    }
+
+    public int getSliceCount() {
+        return this.sliceCount;
+    }
+
+    public void setSliceCount(final int sliceCount) {
+        this.sliceCount = sliceCount;
+    }
+
+    public void setCameraX(final float cameraX) {
+        this.cameraX = cameraX;
+    }
+
+    public void setCameraY(final float cameraY) {
+        this.cameraY = cameraY;
+    }
+
+    public void setCameraZ(final float cameraZ) {
+        this.cameraZ = cameraZ;
+    }
+
     @Override
     public void render(final Graphics2D g) {
         this.onRender(g);
@@ -287,22 +318,22 @@ public class Spatial extends Component {
             final float scale = this.lastScale;
             final float vx = this.lastVx;
             final float vy = this.lastVy;
-            
+
             // Transform mouse point to local space relative to vanishing point
             final float lx = (mx - px - vx) / scale + vx - this.getAbsoluteX();
             final float ly = (my - py - vy) / scale + vy - this.getAbsoluteY();
-            
+
             return new Point2D.Float(lx, ly);
         } else {
             // 3D Inverse Orbital Projection
-            final float wRad = (float)Math.toRadians(this.lastWorldRotY);
-            final float wCos = (float)Math.cos(wRad);
-            final float wSin = (float)Math.sin(wRad);
+            final float wRad = (float) Math.toRadians(this.lastWorldRotY);
+            final float wCos = (float) Math.cos(wRad);
+            final float wSin = (float) Math.sin(wRad);
 
-            final float lRad = (float)Math.toRadians(this.lastRotY);
+            final float lRad = (float) Math.toRadians(this.lastRotY);
             final float totalRad = lRad + wRad;
-            final float tCos = (float)Math.cos(totalRad);
-            final float tSin = (float)Math.sin(totalRad);
+            final float tCos = (float) Math.cos(totalRad);
+            final float tSin = (float) Math.sin(totalRad);
 
             final float halfW = this.width / 2f;
             final float halfH = this.height / 2f;
@@ -316,15 +347,15 @@ public class Spatial extends Component {
 
             // Screen relative to vanishing point + pan
             final float A = mx - this.lastVx - this.lastPx;
-            
+
             // Derived formula for dx (localX - halfW)
             final float dx = (focal * rotWorldX - A * (focal + rotWorldZ)) / (A * tSin - focal * tCos);
             final float lx = dx + halfW;
-            
+
             // Re-project at this X to find local Y
             final float rz = dx * tSin;
             final float s = focal / (focal + rotWorldZ + rz);
-            
+
             final float sy_vy_py = my - this.lastVy - this.lastPy;
             // From sy0 formula: sy0 = vanishingY + (worldCenterY - vanishingY) * s + py - halfH * s
             final float worldCenterY = this.getAbsoluteY() + halfH;
@@ -338,11 +369,11 @@ public class Spatial extends Component {
     public void onMousePressed(final float mx, final float my) {
         super.onMousePressed(mx, my);
         final Point2D.Float local = this.toLocal(mx, my);
-        
+
         final Component hit = this.findChildRecursive(this.content, local.x, local.y);
         this.contentActive = hit != null ? hit : this.content;
         this.contentActive.onMousePressed(local.x, local.y);
-        
+
         this.textureCache = null;
         this.mipmaps = null;
     }
@@ -351,10 +382,10 @@ public class Spatial extends Component {
     public void onMouseMoved(final float mx, final float my) {
         super.onMouseMoved(mx, my);
         final Point2D.Float local = this.toLocal(mx, my);
-        
+
         final Component hit = this.findChildRecursive(this.content, local.x, local.y);
         final Component target = hit != null ? hit : this.content;
-        
+
         boolean changed = false;
         if (target != this.contentHovered) {
             if (this.contentHovered != null) this.contentHovered.onMouseExit();
@@ -362,11 +393,11 @@ public class Spatial extends Component {
             this.contentHovered = target;
             changed = true;
         }
-        
+
         if (this.contentHovered != null) {
             this.contentHovered.onMouseMoved(local.x, local.y);
         }
-        
+
         if (changed) {
             this.textureCache = null;
             this.mipmaps = null;
@@ -412,7 +443,7 @@ public class Spatial extends Component {
         for (int i = root.getChildren().size() - 1; i >= 0; i--) {
             final Component child = root.getChildren().get(i);
             if (!child.isHitTestable()) continue;
-            
+
             if (child.contains(lx, ly)) {
                 final Component sub = this.findChildRecursive(child, lx, ly);
                 if (sub != null) return sub;
@@ -427,16 +458,16 @@ public class Spatial extends Component {
         final Point2D.Float local = this.toLocal(mx, my);
         final float lx = local.x;
         final float ly = local.y;
-        
+
         final float ax = this.content.getAbsoluteX();
         final float ay = this.content.getAbsoluteY();
-        
+
         return lx >= ax && lx <= ax + this.width && ly >= ay && ly <= ay + this.height;
     }
 
-    public void setVanishingPoint(final float vx, final float vy) { 
-        this.vanishingX = vx; 
-        this.vanishingY = vy; 
+    public void setVanishingPoint(final float vx, final float vy) {
+        this.vanishingX = vx;
+        this.vanishingY = vy;
     }
 
     public void setFocalLength(final float f) {

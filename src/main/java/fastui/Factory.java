@@ -22,6 +22,24 @@ public class Factory {
         return img;
     }
 
+    public static BufferedImage createSliceableLayer(final int height, final int arc, final int border, final Color fillColor, final Color borderColor) {
+        final int width = (arc * 2) + 1;
+        final RoundRectangle2D rect = new RoundRectangle2D.Float(0, 0, width, height, arc, arc);
+        final BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        final Graphics2D g2 = img.createGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setColor(borderColor);
+        g2.fill(rect);
+        final int innerWidth = width - border * 2;
+        final int innerHeight = height - border * 2;
+        final int innerArc = arc - border;
+        rect.setRoundRect(border, border, innerWidth, innerHeight, innerArc, innerArc);
+        g2.setColor(fillColor);
+        g2.fill(rect);
+        g2.dispose();
+        return img;
+    }
+
     public static BufferedImage createLabel(final String text, final Font font, final Color color) {
         // Measure text first
         final BufferedImage tmp = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
