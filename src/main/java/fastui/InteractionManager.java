@@ -101,7 +101,7 @@ public class InteractionManager {
         if (nodes == null) return null;
         for (int i = nodes.size() - 1; i >= 0; i--) {
             final Component child = nodes.get(i);
-            if (!child.isHitTestable()) continue;
+            if (!child.isVisible() || !child.isHitTestable()) continue;
 
             // Mouse Clipping: Nur in Kinder abtauchen, wenn die Maus im Parent ist
             if (child.contains(x, y)) {

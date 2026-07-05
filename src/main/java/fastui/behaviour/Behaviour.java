@@ -38,4 +38,7 @@ public interface Behaviour {
 
     default void onKeyReleased(Component target, KeyEvent e) {
     }
+
+    default void onRender(Component target, java.awt.Graphics2D g) {
+    }
 }

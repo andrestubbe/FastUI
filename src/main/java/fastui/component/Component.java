@@ -2,6 +2,7 @@ package fastui.component;
 
 import fastui.Container;
 import fastui.behaviour.Behaviour;
+import fastui.layout.LayoutManager;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -19,6 +20,27 @@ public abstract class Component {
     protected float height;
     protected final List<Behaviour> behaviors = new ArrayList<>();
     protected boolean hitTestable = true;
+    protected boolean visible = true;
+    protected LayoutManager layoutManager;
+    protected float marginTop;
+    protected float marginLeft;
+    protected float marginBottom;
+    protected float marginRight;
+
+    public void setLayout(final LayoutManager layoutManager) {
+        this.layoutManager = layoutManager;
+        this.doLayout();
+    }
+
+    public LayoutManager getLayout() {
+        return this.layoutManager;
+    }
+
+    public void doLayout() {
+        if (this.layoutManager != null && this.children != null) {
+            this.layoutManager.layout(this, this.children);
+        }
+    }
 
     public void add(final Component child) {
         if (this.children == null) {
@@ -119,7 +141,11 @@ public abstract class Component {
     public abstract void onRender(final Graphics2D g);
 
     public void render(final Graphics2D g) {
+        if (!this.visible) return;
         this.onRender(g);
+        for (final Behaviour b : this.behaviors) {
+            b.onRender(this, g);
+        }
         if (this.children != null) {
             for (final Component child : this.children) {
                 child.render(g);
@@ -175,5 +201,54 @@ public abstract class Component {
         this.y = y;
         this.width = width;
         this.height = height;
+        this.doLayout();
+    }
+
+    public void setX(final float x) {
+        this.x = x;
+        this.doLayout();
+    }
+
+    public void setY(final float y) {
+        this.y = y;
+        this.doLayout();
+    }
+
+    public void setWidth(final float width) {
+        this.width = width;
+        this.doLayout();
+    }
+
+    public void setHeight(final float height) {
+        this.height = height;
+        this.doLayout();
+    }
+
+    public void setMargin(final float margin) {
+        this.marginTop = margin;
+        this.marginLeft = margin;
+        this.marginBottom = margin;
+        this.marginRight = margin;
+    }
+
+    public void setMargin(final float top, final float left, final float bottom, final float right) {
+        this.marginTop = top;
+        this.marginLeft = left;
+        this.marginBottom = bottom;
+        this.marginRight = right;
+    }
+
+    public float getMarginTop() { return marginTop; }
+    public float getMarginLeft() { return marginLeft; }
+    public float getMarginBottom() { return marginBottom; }
+    public float getMarginRight() { return marginRight; }
+
+    public boolean isVisible() {
+        return this.visible;
+    }
+
+    public void setVisible(final boolean visible) {
+        this.visible = visible;
+        this.repaint();
     }
 }

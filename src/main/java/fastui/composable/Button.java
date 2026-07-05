@@ -16,33 +16,21 @@ public class Button implements Composable {
     private final Image label;
     private final float labelW;
     private final float labelH;
+    private boolean leftAligned = false;
+    private float lastX, lastY, lastW, lastH;
 
+    // --- Constructor for Text ---
     public Button(
             final float x, final float y,
             final float width, final float height,
             final ButtonTheme theme,
             final String text, final Font font, final Color textColor
     ) {
-        this(x, y, width, height, theme.arc, theme.base, theme.hover, theme.pressed, text, font, textColor);
-    }
+        final BufferedImage base = createBackground(height, theme, theme.base);
+        final BufferedImage hover = createBackground(height, theme, theme.hover);
+        final BufferedImage pressed = createBackground(height, theme, theme.pressed);
 
-    public Button(
-            final float x, final float y,
-            final float width, final float height,
-            final int arc,
-            final Color baseColor,
-            final String text, final Font font, final Color textColor
-    ) {
-        this(x, y, width, height, arc, baseColor, baseColor.brighter(), baseColor.darker(), text, font, textColor);
-    }
-
-    public Button(final float x, final float y, final float width, final float height, final int arc, final Color baseColor, final Color hoverColor, final Color pressedColor, final String text, final Font font, final Color textColor) {
-
-        final BufferedImage base = Factory.createSliceableLayer((int) height, arc, baseColor);
-        final BufferedImage hover = Factory.createSliceableLayer((int) height, arc, hoverColor);
-        final BufferedImage pressed = Factory.createSliceableLayer((int) height, arc, pressedColor);
-
-        int slice = arc / 2;
+        int slice = theme.arc / 2;
         this.background = new Image9Slice(slice, slice, slice, slice, base);
         this.background.addBehavior(new BehaviorButton3x3(base, hover, pressed));
 
@@ -57,10 +45,54 @@ public class Button implements Composable {
         }
     }
 
+    // --- Constructor for Icons ---
+    public Button(
+            final float x, final float y,
+            final float width, final float height,
+            final ButtonTheme theme,
+            final BufferedImage icon
+    ) {
+        final BufferedImage base = createBackground(height, theme, theme.base);
+        final BufferedImage hover = createBackground(height, theme, theme.hover);
+        final BufferedImage pressed = createBackground(height, theme, theme.pressed);
+
+        int slice = theme.arc / 2;
+        this.background = new Image9Slice(slice, slice, slice, slice, base);
+        this.background.addBehavior(new BehaviorButton3x3(base, hover, pressed));
+
+        this.label = new Image(icon);
+        this.label.setHitTestable(false);
+        this.labelW = (float) icon.getWidth();
+        this.labelH = (float) icon.getHeight();
+
+        if (width > 0) {
+            this.setBounds(x, y, width, height);
+        }
+    }
+
+    private static BufferedImage createBackground(float height, ButtonTheme theme, Color stateColor) {
+        if (theme.borderWidth > 0 && theme.borderColor != null) {
+            return Factory.createSliceableLayer((int) height, theme.arc, theme.borderWidth, stateColor, theme.borderColor);
+        } else {
+            return Factory.createSliceableLayer((int) height, theme.arc, stateColor);
+        }
+    }
+
+    public void setLeftAligned(boolean leftAligned) {
+        this.leftAligned = leftAligned;
+        if (lastW > 0) {
+            this.setBounds(lastX, lastY, lastW, lastH);
+        }
+    }
+
     public void setBounds(final float x, final float y, final float width, final float height) {
+        this.lastX = x;
+        this.lastY = y;
+        this.lastW = width;
+        this.lastH = height;
         this.background.setBounds(x, y, width, height);
 
-        final float lx = x + (width - this.labelW) / 2f;
+        final float lx = leftAligned ? x + 12 : x + (width - this.labelW) / 2f;
         final float ly = y + (height - this.labelH) / 2f;
         this.label.setBounds(lx, ly, this.labelW, this.labelH);
     }

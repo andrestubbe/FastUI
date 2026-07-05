@@ -1,10 +1,16 @@
 C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\component\Text.java
+C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\component\Panel.java
+C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\behaviour\BehaviorEditable.java
+C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\component\TextDisplay.java
 C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\composable\TextField.java
 C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\composable\TextArea.java
 C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\composable\ScrollBar.java
+C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\behaviour\BehaviorPlaceholder.java
+C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\layout\LayoutManager.java
 C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\behaviour\BehaviorButton3x3.java
 C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\composable\ButtonTheme.java
 C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\util\Animator.java
+C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\behaviour\BehaviorChatInput.java
 C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\component\ClipContainer.java
 C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\component\Stage.java
 C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\composable\Timeline.java
@@ -12,6 +18,7 @@ C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\co
 C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\component\Image.java
 C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\component\Image9Slice.java
 C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\component\Rangeable.java
+C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\composable\Dropdown.java
 C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\behaviour\BehaviorScrollBar.java
 C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\behaviour\BehaviourDragMove.java
 C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\composable\Range.java
@@ -27,5 +34,6 @@ C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\mo
 C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\composable\Button.java
 C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\Container.java
 C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\component\ImageSwappable.java
+C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\composable\Popup.java
 C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\InteractionManager.java
 C:\Users\andre\Documents\2026-06-14-Work-FastJava\FastUI\src\main\java\fastui\util\Clipping.java

@@ -1,21 +1,32 @@
 package fastui.composable;
 
 import fastui.Factory;
+import fastui.behaviour.Behaviour;
+import fastui.behaviour.BehaviorEditable;
 import fastui.component.Component;
 import fastui.component.Image9Slice;
+import fastui.component.TextDisplay;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.function.Consumer;
 
 public class TextArea implements Composable {
     private final Image9Slice background;
     private final TextDisplay display;
-    
+
     public TextArea(float x, float y, float w, float h, int arc, Color bgColor, Font font, Color textColor) {
-        this.background = new Image9Slice(arc, arc, arc, arc, Factory.createSliceableLayer((int)h, arc, bgColor));
+        this.background = new Image9Slice(arc, arc, arc, arc, Factory.createSliceableLayer((int) h, arc, bgColor));
         this.display = new TextDisplay(font, textColor);
+        this.display.setMargin(12);
+        this.display.addBehavior(new BehaviorEditable());
+        this.setBounds(x, y, w, h);
+    }
+
+    public TextArea(float x, float y, float w, float h, int arc, int borderWidth, Color fillColor, Color borderColor, Font font, Color textColor) {
+        this.background = new Image9Slice(arc, arc, arc, arc, Factory.createSliceableLayer((int) h, arc, borderWidth, fillColor, borderColor));
+        this.display = new TextDisplay(font, textColor);
+        this.display.setMargin(12);
+        this.display.addBehavior(new BehaviorEditable());
         this.setBounds(x, y, w, h);
     }
 
@@ -23,63 +34,51 @@ public class TextArea implements Composable {
         this(0, 0, 0, 0, arc, bgColor, font, textColor);
     }
 
-    public void setBounds(float x, float y, float w, float h) {
-        this.background.setBounds(x, y, w, h);
-        this.display.setBounds(x + 15, y + 15, w - 30, h - 30);
-    }
-
-    public void setText(String text) {
-        this.display.setText(text);
+    public void addBehavior(Behaviour behavior) {
+        this.display.addBehavior(behavior);
     }
 
     public void append(String text) {
         this.display.append(text);
     }
 
+    public void addChangeListener(Consumer<String> listener) {
+        this.display.addChangeListener(listener);
+    }
+
+    public String getText() {
+        return this.display.getText();
+    }
+
+    public float getPreferredHeight(float width) {
+        return this.display.getPreferredHeight(width - 24) + 24;
+    }
+
+    @Override
+    public void setMargin(float margin) {
+        this.background.setMargin(margin);
+    }
+
+    @Override
+    public void setMargin(float top, float left, float bottom, float right) {
+        this.background.setMargin(top, left, bottom, right);
+    }
+
+    public void setBounds(float x, float y, float w, float h) {
+        this.background.setBounds(x, y, w, h);
+        float top = this.display.getMarginTop();
+        float left = this.display.getMarginLeft();
+        float bottom = this.display.getMarginBottom();
+        float right = this.display.getMarginRight();
+        this.display.setBounds(x + left, y + top, w - left - right, h - top - bottom);
+    }
+
+    public void setText(String text) {
+        this.display.setText(text);
+    }
+
     @Override
     public Component[] components() {
         return new Component[]{background, display};
-    }
-
-    private static class TextDisplay extends Component {
-
-        private final Font font;
-        private final Color textColor;
-        private final List<String> lines = new ArrayList<>();
-
-        public TextDisplay(final Font font, final Color textColor) {
-            this.font = font;
-            this.textColor = textColor;
-        }
-
-        public void setText(final String text) {
-            this.lines.clear();
-            if (text != null) {
-                for (final String s : text.split("\n")) this.lines.add(s);
-            }
-            this.repaint();
-        }
-
-        public void append(final String text) {
-            if (text != null) {
-                for (final String s : text.split("\n")) this.lines.add(s);
-            }
-            this.repaint();
-        }
-
-        @Override
-        public void onRender(final Graphics2D g) {
-            g.setFont(this.font);
-            g.setColor(this.textColor);
-            final FontMetrics fm = g.getFontMetrics();
-            final float lineHeight = fm.getHeight();
-            float curY = this.y + fm.getAscent();
-            
-            for (final String line : this.lines) {
-                if (curY > this.y + this.height) break;
-                g.drawString(line, this.x, curY);
-                curY += lineHeight;
-            }
-        }
     }
 }
