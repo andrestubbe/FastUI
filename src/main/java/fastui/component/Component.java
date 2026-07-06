@@ -2,7 +2,7 @@ package fastui.component;
 
 import fastui.Container;
 import fastui.behaviour.Behaviour;
-import fastui.layout.LayoutManager;
+import fastui.layout.Layout;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -13,42 +13,124 @@ public abstract class Component {
 
     protected Container root;
     protected Component parent;
-    protected List<Component> children;
+    
+    // Cache-friendly linked sibling list (replacing ArrayList)
+    public Component firstChild;
+    public Component lastChild;
+    public Component nextSibling;
+    public Component prevSibling;
+
+    // Bounds
     protected float x;
     protected float y;
     protected float width;
     protected float height;
+
+    // Preferred, Min, Max
+    public float preferredWidth;
+    public float preferredHeight;
+    public float minWidth;
+    public float minHeight;
+    public float maxWidth;
+    public float maxHeight;
+
+    // Weight for flex layouts
+    public float weight;
+
+    // Margins (No object allocation)
+    public float marginTop;
+    public float marginLeft;
+    public float marginBottom;
+    public float marginRight;
+
+    // Padding (No object allocation)
+    public float paddingTop;
+    public float paddingLeft;
+    public float paddingBottom;
+    public float paddingRight;
+
+    // Layout configuration (Stored on parent)
+    public Layout layout;
+    public float layoutA;
+    public float layoutB;
+    public int layoutFlags;
+    public boolean layoutDirty = true;
+
     protected final List<Behaviour> behaviors = new ArrayList<>();
     protected boolean hitTestable = true;
     protected boolean visible = true;
-    protected LayoutManager layoutManager;
-    protected float marginTop;
-    protected float marginLeft;
-    protected float marginBottom;
-    protected float marginRight;
 
-    public void setLayout(final LayoutManager layoutManager) {
-        this.layoutManager = layoutManager;
+    public void setLayout(final Layout layout) {
+        this.layout = layout;
         this.doLayout();
     }
 
-    public LayoutManager getLayout() {
-        return this.layoutManager;
+    public Layout getLayout() {
+        return this.layout;
     }
 
     public void doLayout() {
-        if (this.layoutManager != null && this.children != null) {
-            this.layoutManager.layout(this, this.children);
+        if (this.layout != null) {
+            this.layout.apply(this);
         }
     }
 
     public void add(final Component child) {
-        if (this.children == null) {
-            this.children = new ArrayList<>(2);
+        if (child == null) return;
+        if (child.parent != null) {
+            child.parent.remove(child);
         }
         child.parent = this;
         child.root = this.root;
-        this.children.add(child);
+        
+        if (this.firstChild == null) {
+            this.firstChild = child;
+            this.lastChild = child;
+        } else {
+            this.lastChild.nextSibling = child;
+            child.prevSibling = this.lastChild;
+            this.lastChild = child;
+        }
+        
+        child.setRoot(this.root);
+        this.doLayout();
+    }
+
+    public void remove(final Component child) {
+        if (child == null || child.parent != this) return;
+        
+        if (child.prevSibling != null) {
+            child.prevSibling.nextSibling = child.nextSibling;
+        } else {
+            this.firstChild = child.nextSibling;
+        }
+        
+        if (child.nextSibling != null) {
+            child.nextSibling.prevSibling = child.prevSibling;
+        } else {
+            this.lastChild = child.prevSibling;
+        }
+        
+        child.parent = null;
+        child.nextSibling = null;
+        child.prevSibling = null;
+        child.setRoot(null);
+        this.doLayout();
+    }
+
+    public void clear() {
+        Component child = this.firstChild;
+        while (child != null) {
+            Component next = child.nextSibling;
+            child.parent = null;
+            child.nextSibling = null;
+            child.prevSibling = null;
+            child.setRoot(null);
+            child = next;
+        }
+        this.firstChild = null;
+        this.lastChild = null;
+        this.doLayout();
     }
 
     public void addBehavior(final Behaviour behavior) {
@@ -146,10 +228,11 @@ public abstract class Component {
         for (final Behaviour b : this.behaviors) {
             b.onRender(this, g);
         }
-        if (this.children != null) {
-            for (final Component child : this.children) {
-                child.render(g);
-            }
+        
+        Component child = this.firstChild;
+        while (child != null) {
+            child.render(g);
+            child = child.nextSibling;
         }
     }
 
@@ -181,14 +264,12 @@ public abstract class Component {
         return this.hitTestable;
     }
 
-    public List<Component> getChildren() {
-        return this.children;
-    }
-
     public void setRoot(final Container root) {
         this.root = root;
-        if (this.children != null) {
-            for (final Component child : this.children) child.setRoot(root);
+        Component child = this.firstChild;
+        while (child != null) {
+            child.setRoot(root);
+            child = child.nextSibling;
         }
     }
 
@@ -243,6 +324,25 @@ public abstract class Component {
     public float getMarginBottom() { return marginBottom; }
     public float getMarginRight() { return marginRight; }
 
+    public void setPadding(final float padding) {
+        this.paddingTop = padding;
+        this.paddingLeft = padding;
+        this.paddingBottom = padding;
+        this.paddingRight = padding;
+    }
+
+    public void setPadding(final float top, final float left, final float bottom, final float right) {
+        this.paddingTop = top;
+        this.paddingLeft = left;
+        this.paddingBottom = bottom;
+        this.paddingRight = right;
+    }
+
+    public float getPaddingTop() { return paddingTop; }
+    public float getPaddingLeft() { return paddingLeft; }
+    public float getPaddingBottom() { return paddingBottom; }
+    public float getPaddingRight() { return paddingRight; }
+
     public boolean isVisible() {
         return this.visible;
     }
@@ -250,5 +350,13 @@ public abstract class Component {
     public void setVisible(final boolean visible) {
         this.visible = visible;
         this.repaint();
+    }
+
+    public Container getRoot() {
+        return this.root;
+    }
+
+    public Component getParent() {
+        return this.parent;
     }
 }

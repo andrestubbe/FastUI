@@ -31,6 +31,10 @@ public class Image extends Component implements ImageSwappable {
 
     public void setImage(final BufferedImage image) {
         this.image = image;
+        if (image != null) {
+            this.width = image.getWidth();
+            this.height = image.getHeight();
+        }
         this.repaint();
     }
 
@@ -38,6 +42,10 @@ public class Image extends Component implements ImageSwappable {
     public void setImages(BufferedImage... layers) {
         if (layers != null && layers.length > 0) {
             this.image = layers[0];
+            if (this.image != null) {
+                this.width = this.image.getWidth();
+                this.height = this.image.getHeight();
+            }
             this.repaint();
         }
     }

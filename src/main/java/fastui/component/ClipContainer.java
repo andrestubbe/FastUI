@@ -1,12 +1,19 @@
 package fastui.component;
 
 import java.awt.*;
+import fastui.composable.Composable;
 
 /**
  * A container component that restricts the rendering of all its children
  * to its own bounding box (x, y, width, height).
  */
 public class ClipContainer extends Component {
+
+    public void add(final Composable composable) {
+        for (final Component c : composable.components()) {
+            this.add(c);
+        }
+    }
 
     @Override
     public void onRender(Graphics2D g) {

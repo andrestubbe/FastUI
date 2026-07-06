@@ -14,10 +14,15 @@ public class Button implements Composable {
 
     private final Image9Slice background;
     private final Image label;
-    private final float labelW;
-    private final float labelH;
+    private float labelW;
+    private float labelH;
     private boolean leftAligned = false;
     private float lastX, lastY, lastW, lastH;
+
+    private String originalText;
+    private Font font;
+    private Color textColor;
+    private String currentDisplayText;
 
     // --- Constructor for Text ---
     public Button(
@@ -26,6 +31,11 @@ public class Button implements Composable {
             final ButtonTheme theme,
             final String text, final Font font, final Color textColor
     ) {
+        this.originalText = text;
+        this.font = font;
+        this.textColor = textColor;
+        this.currentDisplayText = text;
+
         final BufferedImage base = createBackground(height, theme, theme.base);
         final BufferedImage hover = createBackground(height, theme, theme.hover);
         final BufferedImage pressed = createBackground(height, theme, theme.pressed);
@@ -91,6 +101,37 @@ public class Button implements Composable {
         this.lastW = width;
         this.lastH = height;
         this.background.setBounds(x, y, width, height);
+
+        if (originalText != null && font != null && textColor != null) {
+            float padding = leftAligned ? 24 : 16;
+            float availableW = width - padding;
+            
+            FontMetrics fm = Toolkit.getDefaultToolkit().getFontMetrics(font);
+            int textW = fm.stringWidth(originalText);
+            
+            String displayText = originalText;
+            if (textW > availableW) {
+                String ellipsis = "...";
+                int ellipsisW = fm.stringWidth(ellipsis);
+                if (availableW > ellipsisW) {
+                    int len = originalText.length();
+                    while (len > 0 && fm.stringWidth(originalText.substring(0, len)) + ellipsisW > availableW) {
+                        len--;
+                    }
+                    displayText = originalText.substring(0, len) + ellipsis;
+                } else {
+                    displayText = "";
+                }
+            }
+            
+            if (!displayText.equals(currentDisplayText)) {
+                currentDisplayText = displayText;
+                BufferedImage bakedLabel = Factory.createLabel(displayText, font, textColor);
+                this.label.setImage(bakedLabel);
+                this.labelW = (float) bakedLabel.getWidth();
+                this.labelH = (float) bakedLabel.getHeight();
+            }
+        }
 
         final float lx = leftAligned ? x + 12 : x + (width - this.labelW) / 2f;
         final float ly = y + (height - this.labelH) / 2f;

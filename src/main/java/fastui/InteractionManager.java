@@ -2,20 +2,19 @@ package fastui;
 
 import fastui.component.Component;
 import java.awt.event.*;
-import java.util.List;
 
 public class InteractionManager {
 
-    private final List<Component> children;
+    private final Container container;
     private final java.awt.Component parent;
 
     private Component hovered = null;
     private Component active = null;
     private Component focused = null;
 
-    public InteractionManager(final java.awt.Component parent, final List<Component> children) {
+    public InteractionManager(final Container container, final java.awt.Component parent) {
+        this.container = container;
         this.parent = parent;
-        this.children = children;
     }
 
     public MouseAdapter getMouseAdapter() {
@@ -94,21 +93,20 @@ public class InteractionManager {
     }
 
     private Component findComponentAt(final int x, final int y) {
-        return this.findRecursive(this.children, x, y);
+        return this.findRecursive(this.container.lastChild, x, y);
     }
 
-    private Component findRecursive(final List<Component> nodes, final int x, final int y) {
-        if (nodes == null) return null;
-        for (int i = nodes.size() - 1; i >= 0; i--) {
-            final Component child = nodes.get(i);
-            if (!child.isVisible() || !child.isHitTestable()) continue;
-
-            // Mouse Clipping: Nur in Kinder abtauchen, wenn die Maus im Parent ist
-            if (child.contains(x, y)) {
-                final Component subHit = this.findRecursive(child.getChildren(), x, y);
-                if (subHit != null) return subHit;
-                return child;
+    private Component findRecursive(final Component startChild, final int x, final int y) {
+        Component child = startChild;
+        while (child != null) {
+            if (child.isVisible() && child.isHitTestable()) {
+                if (child.contains(x, y)) {
+                    final Component subHit = this.findRecursive(child.lastChild, x, y);
+                    if (subHit != null) return subHit;
+                    return child;
+                }
             }
+            child = child.prevSibling;
         }
         return null;
     }

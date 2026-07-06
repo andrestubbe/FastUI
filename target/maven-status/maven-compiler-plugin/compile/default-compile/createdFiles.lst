@@ -1,4 +1,5 @@
 fastui\behaviour\BehaviorScrollBar$ScrollListener.class
+fastui\layout\NoneLayout.class
 fastui\behaviour\BehaviourDragMove.class
 fastui\composable\Composable.class
 fastui\composable\TextArea.class
@@ -8,6 +9,8 @@ fastui\behaviour\BehaviorScrollBar.class
 fastui\util\Clipping.class
 fastui\component\Image.class
 fastui\component\ImageSwappable.class
+fastui\layout\StackLayout.class
+fastui\layout\Layout.class
 fastui\composable\ScrollBar$ScrollListener.class
 fastui\InteractionManager$2.class
 fastui\behaviour\BehaviorEditable.class
@@ -17,10 +20,10 @@ fastui\behaviour\BehaviorPlaceholder.class
 fastui\Factory.class
 fastui\composable\ButtonTheme.class
 fastui\component\Panel.class
+fastui\layout\LinearLayout.class
 fastui\behaviour\BehaviorRange3x3.class
 fastui\component\ClipContainer.class
 fastui\composable\TextField.class
-fastui\component\Stage.class
 fastui\InteractionManager.class
 fastui\behaviour\Behaviour.class
 fastui\composable\Dropdown.class
@@ -29,12 +32,12 @@ fastui\Container.class
 fastui\component\Image9Slice.class
 fastui\composable\Popup$1.class
 fastui\model\TimelineViewport$ViewportListener.class
-fastui\component\Spatial.class
 fastui\component\TimelineAxis$Granularity.class
 fastui\component\TimelineAxis$1.class
 fastui\component\Text.class
 fastui\composable\Button.class
 fastui\component\TimelineAxis$ViewportListener.class
+fastui\layout\SplitLayout.class
 fastui\component\TimelineAxis$EdgeDrag.class
 fastui\behaviour\BehaviorRange3x3$DragState.class
 fastui\component\TimelineAxis.class
