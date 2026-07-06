@@ -3,8 +3,8 @@ package fastui.composable;
 import fastui.Container;
 import fastui.component.Component;
 
-import javax.swing.JWindow;
-import java.awt.Color;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
@@ -22,14 +22,15 @@ public class Popup {
         this.window.setBackground(new Color(0, 0, 0, 0));
         this.window.setAlwaysOnTop(true);
         this.window.setFocusableWindowState(true);
-        
+
         this.container = new Container();
         this.container.setBackground(new Color(0, 0, 0, 0));
         this.window.setContentPane(this.container);
-        
+
         this.window.addWindowFocusListener(new WindowFocusListener() {
             @Override
-            public void windowGainedFocus(WindowEvent e) {}
+            public void windowGainedFocus(WindowEvent e) {
+            }
 
             @Override
             public void windowLostFocus(WindowEvent e) {
@@ -70,7 +71,7 @@ public class Popup {
         this.window.setVisible(false);
         this.window.dispose();
     }
-    
+
     public JWindow getWindow() {
         return this.window;
     }

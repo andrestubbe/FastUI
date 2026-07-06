@@ -2,6 +2,7 @@ package fastui;
 
 import fastui.component.Component;
 import fastui.composable.Composable;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -21,7 +22,7 @@ public class Container extends JPanel {
         this.setBackground(new Color(15, 15, 15));
 
         this.interactionManager = new InteractionManager(this, this);
-        
+
         final MouseAdapter mouse = this.interactionManager.getMouseAdapter();
         this.addMouseListener(mouse);
         this.addMouseMotionListener(mouse);
@@ -34,7 +35,7 @@ public class Container extends JPanel {
             component.getParent().remove(component);
         }
         component.setRoot(this);
-        
+
         if (this.firstChild == null) {
             this.firstChild = component;
             this.lastChild = component;
@@ -55,19 +56,19 @@ public class Container extends JPanel {
 
     public void remove(final Component component) {
         if (component == null) return;
-        
+
         if (component.prevSibling != null) {
             component.prevSibling.nextSibling = component.nextSibling;
         } else {
             this.firstChild = component.nextSibling;
         }
-        
+
         if (component.nextSibling != null) {
             component.nextSibling.prevSibling = component.prevSibling;
         } else {
             this.lastChild = component.prevSibling;
         }
-        
+
         component.nextSibling = null;
         component.prevSibling = null;
         component.setRoot(null);

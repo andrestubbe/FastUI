@@ -12,14 +12,8 @@ public class Dropdown implements Composable {
     private final Image9Slice background;
     private final List<Component> children = new ArrayList<>();
 
-    public Dropdown(
-            float x, float y, float w, float h,
-            int arc, int border,
-            Color fillColor,
-            Color borderColor
-    ) {
-        this.background = new Image9Slice(arc, arc, arc, arc,
-                Factory.createSliceableLayer((int) h, arc, border, fillColor, borderColor));
+    public Dropdown(float x, float y, float w, float h, int arc, int border, Color fillColor, Color borderColor) {
+        this.background = new Image9Slice(arc, arc, arc, arc, Factory.createSliceableLayer((int) h, arc, border, fillColor, borderColor));
         this.setBounds(x, y, w, h);
     }
 

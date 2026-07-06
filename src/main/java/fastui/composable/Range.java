@@ -1,7 +1,7 @@
 package fastui.composable;
 
-import fastui.component.Component;
 import fastui.behaviour.BehaviorRange3x3;
+import fastui.component.Component;
 import fastui.component.Image9Slice;
 
 import java.awt.image.BufferedImage;
@@ -17,18 +17,18 @@ public class Range implements Composable {
     private float width;
     private float height;
 
-    public Range(final float x, final float y, final float width, final float height, 
+    public Range(final float x, final float y, final float width, final float height,
                  final BufferedImage trackImg, final BufferedImage spanImg,
                  final float minValue, final float maxValue) {
-        
+
         final int arc = trackImg.getHeight() / 4;
         this.track = new Image9Slice(arc, arc, arc, arc, trackImg);
         this.bar = new Image9Slice(arc, arc, arc, arc, spanImg);
         this.bar.setHitTestable(false);
         this.behavior = new BehaviorRange3x3(minValue, maxValue);
-        
+
         this.track.addBehavior(this.behavior);
-        
+
         this.behavior.addListener((min, max) -> {
             this.updateBarBounds(min, max);
         });
@@ -63,7 +63,15 @@ public class Range implements Composable {
         this.bar.setBounds(bx, this.y, bw, this.height);
     }
 
-    public BehaviorRange3x3 getBehavior() { return this.behavior; }
-    public float getMinValue() { return this.behavior.getMinValue(); }
-    public float getMaxValue() { return this.behavior.getMaxValue(); }
+    public BehaviorRange3x3 getBehavior() {
+        return this.behavior;
+    }
+
+    public float getMinValue() {
+        return this.behavior.getMinValue();
+    }
+
+    public float getMaxValue() {
+        return this.behavior.getMaxValue();
+    }
 }
