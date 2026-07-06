@@ -145,6 +145,7 @@ Download the latest JARs directly to add them to your classpath:
 
 ## API Reference
 
+### Core Components
 | Component | Description |
 |-------------|---------------------------------------------------------------------------------|
 | `Timeline` | High-precision temporal selector capsule with daily grid and selection markers. |
@@ -152,6 +153,16 @@ Download the latest JARs directly to add them to your classpath:
 | `TextField` | Animated single-line input field with Neon-Dark styling. |
 | `Button` | High-performance interactive trigger with mouse behavior support. |
 | `Image3x3` | Sliceable asset renderer for perfectly rounded capsules at any size. |
+| `Panel` | General purpose layout container holding multiple child components. |
+| `ClipContainer` | Scrollable/clipping container for list elements and sidebars. |
+
+### Layout Engines
+| Layout | Description |
+|-------------|---------------------------------------------------------------------------------|
+| `LinearLayout` | Stateless layout for vertical or horizontal sequential flow alignment. |
+| `SplitLayout` | Resizable split layout between two panels with an interactive divider. |
+| `StackLayout` | Stacks multiple overlay components directly on top of each other. |
+| `NoneLayout` | Absolute positioning layout for custom manual component coordinate placement. |
 
 ---
 
