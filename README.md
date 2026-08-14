@@ -16,6 +16,29 @@ to achieve multi-thousand FPS performance on modern hardware.
 
 ---
 
+## Quick Start
+
+```java
+// Initialize the UI Root
+Container root = new Container();
+
+// Add the Unified Timeline Sequencer
+Timeline timeline = new Timeline(
+    startTime, endTime,
+    200, 20, Color.BLACK,       // Height, Arc, BG
+    90, trackColor, spanColor,  // Range settings
+    font, tickColor, labelColor
+);
+root.add(timeline);
+
+// In your VSync-locked render loop
+root.render(g2d);
+```
+
+---
+
+---
+
 ## Table of Contents
 
 - [Key Features](#key-features)
@@ -66,26 +89,6 @@ Graphical Assets**.
 
 ---
 
-## Quick Start
-
-```java
-// Initialize the UI Root
-Container root = new Container();
-
-// Add the Unified Timeline Sequencer
-Timeline timeline = new Timeline(
-    startTime, endTime,
-    200, 20, Color.BLACK,       // Height, Arc, BG
-    90, trackColor, spanColor,  // Range settings
-    font, tickColor, labelColor
-);
-root.add(timeline);
-
-// In your VSync-locked render loop
-root.render(g2d);
-```
-
----
 
 ## Installation
 
