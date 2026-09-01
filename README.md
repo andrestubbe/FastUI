@@ -1,3 +1,6 @@
+> [!WARNING]
+> **🚧 WIP — Active Retained-Mode Component Architecture & Vulkan/DirectX Integration in Progress.**
+
 # FastUI 0.1.1 [ALPHA-2026-07-06] — High-Performance, Deterministic UI for Java
 
 [![Status](https://img.shields.io/badge/status-0.1.1-brightgreen.svg)](https://github.com/andrestubbe/FastUI/releases/tag/0.1.1)
