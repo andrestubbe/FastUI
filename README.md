@@ -15,6 +15,8 @@ FastUI is a next-generation UI framework built for maximum speed and zero-copy e
 UI frameworks (Swing/AWT) that rasterize vector graphics on every frame, FastUI uses a **Retained-Mode Baking Pipeline**
 to achieve multi-thousand FPS performance on modern hardware.
 
+Watch Demo (YouTube) | Watch JMH Benchmark (YouTube)
+
 [![FastUI Showcase](docs/screenshot.png)](https://www.youtube.com/watch?v=BZsqQl7WqWk)
 
 ---
