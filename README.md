@@ -42,8 +42,6 @@ root.render(g2d);
 
 ---
 
----
-
 ## Table of Contents
 
 - [Key Features](#key-features)
@@ -81,6 +79,13 @@ Graphical Assets**.
 - 🚫 **Garbage Collector Pressure** — Traditional loops allocate thousands of objects. FastUI is **allocation-free**.
 - 🪟 **Resizing Flicker** — Standard resizing is jittery. FastUI integrates with `FastWindow` for butter-smooth scaling.
 - 🔁 **Lack of VSync Alignment** — FastUI is natively synchronized to the display refresh rate.
+
+| Feature | Java Swing (JComponent) | JavaFX Scenegraph | FastUI |
+|:---|:---|:---|:---|
+| **Render Paradigm** | Immediate CPU re-rasterization| Heavy retained scene graph nodes| **Retained baked-layer blitting** |
+| **Frame Rate & VSync** | ~30–60 FPS (EDT lockups) | 60 FPS (Pulse loop stutter) | **144Hz+ native VSync hardware locked**|
+| **Window Resizing** | Severe redraw flicker & artifacts| Layout relayout recalculations| **Flicker-free smooth Win32 resize** |
+| **Allocation per Frame**| High (`Graphics` & event objects)| High (Node bindings & events) | **Zero GC render loop** |
 
 ---
 
